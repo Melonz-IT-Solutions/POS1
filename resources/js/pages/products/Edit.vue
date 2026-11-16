@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import InputError from '@/components/InputError.vue';
@@ -11,12 +11,13 @@ import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import * as ProductController from '@/actions/App/Http/Controllers/Admin/ProductController';
-import type { Category, Product } from '@/types/models';
+import type { Category, Product, ProductBundleItem } from '@/types/models';
 
 const props = defineProps<{
-    product: Product & { category?: Pick<Category, 'id' | 'name'> };
-    categories: Pick<Category, 'id' | 'name'>[];
-    vatTypes: { value: string; label: string }[];
+    product:     Product & { category?: Pick<Category, 'id' | 'name'>; bundleItems?: ProductBundleItem[] };
+    categories:  Pick<Category, 'id' | 'name'>[];
+    vatTypes:    { value: string; label: string }[];
+    allProducts: Pick<Product, 'id' | 'name' | 'sku' | 'selling_price'>[];
 }>();
 
 const form = useForm({
@@ -31,9 +32,40 @@ const form = useForm({
     vat_type: props.product.vat_type,
     minimum_stock: String(props.product.minimum_stock),
     is_active: props.product.is_active,
+    is_bundle: props.product.is_bundle,
     image: null as File | null,
     price_change_reason: '',
 });
+
+// Bundle items
+interface BundleLine { component_id: number; name: string; sku: string; quantity: number; unit_price: number }
+const bundleLines = ref<BundleLine[]>(
+    (props.product.bundleItems ?? []).map(bi => ({
+        component_id: bi.component_id,
+        name:         bi.component?.name ?? '',
+        sku:          bi.component?.sku ?? '',
+        quantity:     bi.quantity,
+        unit_price:   bi.component?.selling_price ?? 0,
+    })),
+);
+const bundleSearch = ref('');
+
+const filteredForBundle = computed(() => {
+    const q = bundleSearch.value.toLowerCase();
+    return q ? props.allProducts.filter(p => p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q)) : props.allProducts;
+});
+
+function addBundleComponent(p: Pick<Product, 'id' | 'name' | 'sku' | 'selling_price'>) {
+    const existing = bundleLines.value.find(l => l.component_id === p.id);
+    if (existing) { existing.quantity++; } else {
+        bundleLines.value.push({ component_id: p.id, name: p.name, sku: p.sku, quantity: 1, unit_price: p.selling_price });
+    }
+    bundleSearch.value = '';
+}
+
+function removeBundleLine(idx: number) { bundleLines.value.splice(idx, 1); }
+
+function peso(c: number) { return `₱${(c / 100).toLocaleString('en-PH', { minimumFractionDigits: 2 })}`; }
 
 const imagePreview = ref<string | null>(
     props.product.image_path ? `/storage/${props.product.image_path}` : null
@@ -60,9 +92,10 @@ function checkPriceChange() {
 function submit() {
     form.transform((data) => ({
         ...data,
-        cost_price: Math.round(parseFloat(String(data.cost_price)) * 100) || 0,
+        cost_price:    Math.round(parseFloat(String(data.cost_price)) * 100) || 0,
         selling_price: Math.round(parseFloat(String(data.selling_price)) * 100) || 0,
         minimum_stock: parseInt(String(data.minimum_stock)) || 0,
+        bundle_items:  data.is_bundle ? bundleLines.value.map(l => ({ component_id: l.component_id, quantity: l.quantity })) : [],
         _method: 'PUT',
     })).post(ProductController.update.url({ product: props.product.id }), {
         forceFormData: true,
@@ -76,7 +109,7 @@ function submit() {
         { title: 'Products', href: ProductController.index.url() },
         { title: product.name, href: ProductController.edit.url({ product: product.id }) },
     ]">
-        <div class="mx-auto max-w-2xl p-6 space-y-6">
+        <div class="max-w-2xl p-6 space-y-6">
             <div>
                 <h1 class="text-2xl font-bold">Edit Product</h1>
                 <p class="text-muted-foreground text-sm">{{ product.name }} · SKU: {{ product.sku }}</p>
@@ -217,6 +250,51 @@ function submit() {
                         </div>
                     </div>
                     <InputError :message="form.errors.image" />
+                </div>
+
+                <!-- Bundle -->
+                <div class="rounded-xl border p-5 space-y-4">
+                    <div class="flex items-center gap-2">
+                        <Checkbox id="is_bundle" v-model:checked="form.is_bundle" />
+                        <Label for="is_bundle" class="cursor-pointer font-semibold">This is a bundle / kit</Label>
+                    </div>
+                    <p class="text-xs text-muted-foreground">Bundles combine multiple products into one item sold together.</p>
+
+                    <template v-if="form.is_bundle">
+                        <Input v-model="bundleSearch" placeholder="Search components to add..." />
+                        <div v-if="bundleSearch" class="border rounded-md divide-y max-h-40 overflow-y-auto text-sm">
+                            <div
+                                v-for="p in filteredForBundle.slice(0, 15)"
+                                :key="p.id"
+                                class="flex items-center justify-between px-3 py-1.5 hover:bg-muted cursor-pointer"
+                                @click="addBundleComponent(p)"
+                            >
+                                <span>{{ p.name }} <span class="text-muted-foreground text-xs">{{ p.sku }}</span></span>
+                                <span class="font-mono text-xs">{{ peso(p.selling_price) }}</span>
+                            </div>
+                        </div>
+                        <div v-if="bundleLines.length" class="border rounded-md overflow-hidden">
+                            <table class="w-full text-sm">
+                                <thead class="bg-muted/50"><tr>
+                                    <th class="text-left px-3 py-1.5">Component</th>
+                                    <th class="text-right px-3 py-1.5 w-20">Qty</th>
+                                    <th class="px-3 py-1.5 w-8"></th>
+                                </tr></thead>
+                                <tbody>
+                                    <tr v-for="(l, i) in bundleLines" :key="i" class="border-t">
+                                        <td class="px-3 py-1.5">{{ l.name }} <span class="text-xs text-muted-foreground">{{ l.sku }}</span></td>
+                                        <td class="px-3 py-1.5 text-right">
+                                            <input v-model.number="l.quantity" type="number" min="1" class="w-14 border rounded px-1.5 py-0.5 text-xs text-right bg-background" />
+                                        </td>
+                                        <td class="px-3 py-1.5 text-center">
+                                            <button type="button" @click="removeBundleLine(i)" class="text-muted-foreground hover:text-destructive text-xs">✕</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p v-else class="text-xs text-muted-foreground">No components added yet.</p>
+                    </template>
                 </div>
 
                 <!-- Active + Submit -->

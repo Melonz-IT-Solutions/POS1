@@ -19,10 +19,8 @@ void createInertiaApp({
                 return AuthLayout;
             case name.startsWith('settings/'):
                 return [AppLayout, SettingsLayout];
-            case name.startsWith('pos/'):
-                return null; // POS uses its own full-screen layout
             default:
-                return AppLayout;
+                return null; // App pages wrap themselves in <AppLayout>; POS and print pages are full-screen
         }
     },
     withApp: (app) => {

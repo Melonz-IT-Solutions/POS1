@@ -3,6 +3,7 @@ import { AlertTriangle, ArrowRight, BarChart3, ClipboardList, Package, ShoppingC
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import RevenueChart from '@/components/RevenueChart.vue';
 import * as InventoryController from '@/actions/App/Http/Controllers/Admin/InventoryController';
 import * as ProductController from '@/actions/App/Http/Controllers/Admin/ProductController';
 import * as PurchaseOrderController from '@/actions/App/Http/Controllers/Admin/PurchaseOrderController';
@@ -19,6 +20,14 @@ interface TodayStats {
 }
 
 interface DayStat { revenue: number; transactions: number }
+
+interface WeekDay {
+    date: string;
+    label: string;
+    is_today: boolean;
+    revenue: number;
+    transactions: number;
+}
 
 interface LowStockItem {
     id: number;
@@ -60,6 +69,7 @@ const props = defineProps<{
     today: TodayStats;
     yesterday: DayStat;
     month: DayStat;
+    weeklyRevenue: WeekDay[];
     lowStockItems: LowStockItem[];
     recentSales: RecentSale[];
     topProducts: TopProduct[];
@@ -159,6 +169,59 @@ const poStatusConfig: Partial<Record<PurchaseOrderStatus, { label: string; class
                     <p class="text-3xl font-bold tabular-nums">{{ peso(month.revenue) }}</p>
                     <p class="text-muted-foreground text-xs">{{ month.transactions.toLocaleString() }} transactions</p>
                 </div>
+            </div>
+
+
+
+            <!-- ── Quick actions ───────────────────────────────────────── -->
+            <div class="rounded-xl border p-5">
+                <h2 class="font-semibold text-sm mb-4">Quick Actions</h2>
+                <div class="flex flex-wrap gap-3">
+                    <Button as-child>
+                        <a href="/pos">
+                            <ShoppingCart class="mr-2 h-4 w-4" />
+                            Open POS Terminal
+                        </a>
+                    </Button>
+                    <Button variant="outline" as-child>
+                        <a :href="ProductController.create.url()">
+                            <Package class="mr-2 h-4 w-4" />
+                            New Product
+                        </a>
+                    </Button>
+                    <Button variant="outline" as-child>
+                        <a :href="PurchaseOrderController.create.url()">
+                            <ClipboardList class="mr-2 h-4 w-4" />
+                            New Purchase Order
+                        </a>
+                    </Button>
+                    <Button variant="outline" as-child>
+                        <a :href="ReportController.sales.url()">
+                            <BarChart3 class="mr-2 h-4 w-4" />
+                            Sales Report
+                        </a>
+                    </Button>
+                    <Button variant="outline" as-child>
+                        <a :href="ReportController.cashiers.url()">
+                            <Users class="mr-2 h-4 w-4" />
+                            Cashier Report
+                        </a>
+                    </Button>
+                </div>
+            </div>
+
+            <!-- ── 7-day revenue chart ──────────────────────────────────── -->
+            <div class="rounded-xl border p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="font-semibold text-sm">Revenue — Last 7 Days</h2>
+                        <p class="text-muted-foreground text-xs mt-0.5">Daily completed sales totals</p>
+                    </div>
+                    <a :href="ReportController.sales.url()" class="text-primary text-xs flex items-center gap-1 hover:underline">
+                        Full report <ArrowRight class="h-3 w-3" />
+                    </a>
+                </div>
+                <RevenueChart :data="weeklyRevenue" />
             </div>
 
             <!-- ── Low stock alert ──────────────────────────────────────── -->
@@ -295,43 +358,6 @@ const poStatusConfig: Partial<Record<PurchaseOrderStatus, { label: string; class
                             </p>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- ── Quick actions ───────────────────────────────────────── -->
-            <div class="rounded-xl border p-5">
-                <h2 class="font-semibold text-sm mb-4">Quick Actions</h2>
-                <div class="flex flex-wrap gap-3">
-                    <Button as-child>
-                        <a href="/pos">
-                            <ShoppingCart class="mr-2 h-4 w-4" />
-                            Open POS Terminal
-                        </a>
-                    </Button>
-                    <Button variant="outline" as-child>
-                        <a :href="ProductController.create.url()">
-                            <Package class="mr-2 h-4 w-4" />
-                            New Product
-                        </a>
-                    </Button>
-                    <Button variant="outline" as-child>
-                        <a :href="PurchaseOrderController.create.url()">
-                            <ClipboardList class="mr-2 h-4 w-4" />
-                            New Purchase Order
-                        </a>
-                    </Button>
-                    <Button variant="outline" as-child>
-                        <a :href="ReportController.sales.url()">
-                            <BarChart3 class="mr-2 h-4 w-4" />
-                            Sales Report
-                        </a>
-                    </Button>
-                    <Button variant="outline" as-child>
-                        <a :href="ReportController.cashiers.url()">
-                            <Users class="mr-2 h-4 w-4" />
-                            Cashier Report
-                        </a>
-                    </Button>
                 </div>
             </div>
 

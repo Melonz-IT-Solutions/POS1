@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
-import { Building2, Mail, Pencil, Phone, Plus, RotateCcw, Search, Trash2 } from '@lucide/vue';
+import { Building2, Eye, Mail, Pencil, Phone, Plus, RotateCcw, Search, Trash2 } from '@lucide/vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AppPagination from '@/components/AppPagination.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
@@ -32,12 +32,12 @@ const props = defineProps<{
 }>();
 
 const search = ref(props.filters.search ?? '');
-const statusFilter = ref(props.filters.status ?? '');
+const statusFilter = ref(props.filters.status ?? 'all');
 
 function applyFilters() {
     router.get(SupplierController.index.url(), {
         search: search.value || undefined,
-        status: statusFilter.value || undefined,
+        status: statusFilter.value === 'all' ? undefined : statusFilter.value,
     }, { preserveState: true, replace: true });
 }
 
@@ -88,7 +88,7 @@ function initials(name: string) {
                         <SelectValue placeholder="All statuses" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All statuses</SelectItem>
+                        <SelectItem value="all">All statuses</SelectItem>
                         <SelectItem value="active">Active</SelectItem>
                         <SelectItem value="inactive">Inactive</SelectItem>
                         <SelectItem value="deleted">Deleted</SelectItem>
@@ -157,6 +157,11 @@ function initials(name: string) {
                                         <RotateCcw class="h-4 w-4" />
                                     </Button>
                                     <template v-else>
+                                        <Button size="sm" variant="ghost" as-child title="View">
+                                            <a :href="SupplierController.show.url({ supplier: s.id })">
+                                                <Eye class="h-4 w-4" />
+                                            </a>
+                                        </Button>
                                         <Button size="sm" variant="ghost" as-child title="Edit">
                                             <a :href="SupplierController.edit.url({ supplier: s.id })">
                                                 <Pencil class="h-4 w-4" />

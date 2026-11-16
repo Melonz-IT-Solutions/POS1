@@ -38,7 +38,7 @@ function submit() {
         { title: 'Users', href: UserController.index.url() },
         { title: 'New User', href: UserController.create.url() },
     ]">
-        <div class="mx-auto max-w-xl p-6 space-y-6">
+        <div class="max-w-xl p-6 space-y-6">
             <div>
                 <h1 class="text-2xl font-bold">New User</h1>
                 <p class="text-muted-foreground text-sm">Create a staff account</p>

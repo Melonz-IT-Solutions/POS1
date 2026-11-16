@@ -10,11 +10,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\POS\StoreSaleRequest;
 use App\Http\Requests\POS\VoidSaleRequest;
 use App\Http\Requests\POS\RefundSaleRequest;
+use App\Mail\SaleReceipt;
 use App\Models\Sale;
+use App\Models\Setting;
+use App\Models\User;
 use App\Repositories\Contracts\SaleRepositoryInterface;
 use App\Services\SaleService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -30,18 +35,81 @@ class SaleController extends Controller
         $filters = $request->only(['search', 'status', 'cashier_id', 'date_from', 'date_to', 'payment_method']);
         $sales   = $this->saleRepository->paginate($filters, 20);
 
+        $cashiers = User::whereHas('sales')->orderBy('name')->get(['id', 'name']);
+
         return Inertia::render('pos/Sales', [
-            'sales'   => $sales,
-            'filters' => $filters,
+            'sales'    => $sales,
+            'filters'  => $filters,
+            'cashiers' => $cashiers,
+            'canVoid'  => $request->user()->can('void', Sale::class),
+        ]);
+    }
+
+    public function export(Request $request): HttpResponse
+    {
+        $this->authorize('viewAny', Sale::class);
+
+        $filters = $request->only(['search', 'status', 'cashier_id', 'date_from', 'date_to', 'payment_method']);
+        $sales   = $this->saleRepository->export($filters);
+
+        $filename = 'sales-' . now()->format('Y-m-d') . '.csv';
+
+        return response()->streamDownload(function () use ($sales) {
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, [
+                'Receipt Number', 'Date', 'Time', 'Cashier', 'Customer',
+                'Subtotal', 'VAT', 'Discount', 'Total', 'Status', 'Payment Method(s)',
+            ]);
+
+            foreach ($sales as $sale) {
+                $methods = $sale->payments->pluck('payment_method')->unique()->implode(', ');
+                fputcsv($handle, [
+                    $sale->receipt_number,
+                    $sale->created_at->toDateString(),
+                    $sale->created_at->format('H:i:s'),
+                    $sale->cashier?->name ?? '',
+                    $sale->customer?->name ?? 'Walk-in',
+                    number_format($sale->subtotal / 100, 2),
+                    number_format($sale->vat_amount / 100, 2),
+                    number_format($sale->discount_amount / 100, 2),
+                    number_format($sale->total_amount / 100, 2),
+                    $sale->status,
+                    $methods,
+                ]);
+            }
+
+            fclose($handle);
+        }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    public function receipt(Sale $sale): Response
+    {
+        $sale->load(['items', 'payments', 'customer', 'cashier']);
+
+        return Inertia::render('pos/Receipt', [
+            'sale'     => $sale,
+            'settings' => [
+                'business_name'     => Setting::get('business_name',     'My Store'),
+                'business_address'  => Setting::get('business_address',  ''),
+                'business_phone'    => Setting::get('business_phone',    ''),
+                'business_tin'      => Setting::get('business_tin',      ''),
+                'receipt_header'    => Setting::get('receipt_header',    'Thank you for shopping!'),
+                'receipt_footer'    => Setting::get('receipt_footer',    'Please come again.'),
+                'show_vat_breakdown'=> Setting::get('show_vat_breakdown', 'true') === 'true',
+                'vat_registered'    => Setting::get('vat_registered',    'true') === 'true',
+            ],
         ]);
     }
 
     public function show(Sale $sale): Response
     {
-        $sale->load(['items.product', 'payments', 'customer', 'cashier', 'refunds']);
+        $sale->load(['items', 'payments', 'customer', 'cashier', 'voidedBy', 'refunds.items', 'refunds.cashier']);
 
         return Inertia::render('pos/SaleShow', [
-            'sale' => $sale,
+            'sale'      => $sale,
+            'canVoid'   => auth()->user()->can('void', $sale),
+            'canRefund' => auth()->user()->can('refund', $sale),
         ]);
     }
 
@@ -79,6 +147,7 @@ class SaleController extends Controller
             sc_id_no:       $validated['sc_id_no'] ?? null,
             pwd_name:       $validated['pwd_name'] ?? null,
             pwd_id_no:      $validated['pwd_id_no'] ?? null,
+            redeem_points:  (int) ($validated['redeem_points'] ?? 0),
         );
 
         $sale = $this->saleService->createFromCart($data, $request->user());
@@ -175,6 +244,20 @@ class SaleController extends Controller
             'message'      => 'Refund processed successfully.',
             'refund_sale'  => $refundSale,
         ], 201);
+    }
+
+    public function emailReceipt(Request $request, Sale $sale): JsonResponse
+    {
+        $this->authorize('view', $sale);
+
+        $data = $request->validate([
+            'email' => ['required', 'email', 'max:255'],
+        ]);
+
+        $sale->load(['items', 'payments', 'customer', 'cashier']);
+        Mail::to($data['email'])->queue(new SaleReceipt($sale));
+
+        return response()->json(['message' => 'Receipt sent to ' . $data['email']]);
     }
 
     public function heldList(Request $request): JsonResponse

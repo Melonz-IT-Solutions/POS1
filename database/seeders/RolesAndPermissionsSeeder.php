@@ -50,7 +50,10 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage settings',
 
             // Shifts
-            'manage shifts', 'view all shifts',
+            'manage shifts', 'view shifts', 'view own shifts',
+
+            // Audit
+            'view audit logs',
         ];
 
         foreach ($permissions as $permission) {
@@ -75,7 +78,8 @@ class RolesAndPermissionsSeeder extends Seeder
             'create purchase orders', 'view purchase orders', 'receive goods',
             'create discounts', 'view discounts', 'apply discounts', 'apply discounts above limit',
             'view reports', 'view profit reports',
-            'manage shifts', 'view all shifts',
+            'manage shifts', 'view shifts', 'view own shifts',
+            'view audit logs',
         ]);
 
         // ── Cashier ───────────────────────────────────────────────────
@@ -85,7 +89,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'view products',
             'view customers', 'create customers',
             'apply discounts',
-            'manage shifts',
+            'manage shifts', 'view own shifts',
         ]);
     }
 }

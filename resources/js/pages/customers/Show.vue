@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import {
-    MapPin, Mail, MessageSquare, Pencil, Phone, ReceiptText, Star,
+    MapPin, Mail, MessageSquare, Pencil, Phone, ReceiptText, Star, TrendingUp, TrendingDown,
 } from '@lucide/vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AppPagination from '@/components/AppPagination.vue';
@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { useCurrency } from '@/composables/useCurrency';
 import * as CustomerController from '@/actions/App/Http/Controllers/Admin/CustomerController';
-import type { Customer, Sale } from '@/types/models';
+import type { Customer, Sale, LoyaltyTransaction, PaginatedResponse } from '@/types/models';
 
 interface Stats {
     total_sales: number;
@@ -37,6 +37,7 @@ interface PaginatedSales {
 const props = defineProps<{
     customer: Customer;
     sales: PaginatedSales;
+    loyaltyTransactions: PaginatedResponse<LoyaltyTransaction>;
     stats: Stats;
 }>();
 
@@ -181,6 +182,57 @@ function formatDate(dt: string) {
                 </div>
 
                 <AppPagination :meta="sales" />
+            </div>
+
+            <!-- Loyalty Transaction Ledger -->
+            <div v-if="loyaltyTransactions.total > 0" class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <Star class="h-5 w-5 text-amber-500" />
+                    <h2 class="font-semibold text-lg">Loyalty Ledger</h2>
+                    <span class="text-muted-foreground text-sm">({{ loyaltyTransactions.total }} entries)</span>
+                </div>
+
+                <div class="rounded-xl border overflow-hidden">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b bg-muted/30 text-left">
+                                <th class="px-4 py-2.5 font-medium">Date</th>
+                                <th class="px-4 py-2.5 font-medium">Type</th>
+                                <th class="px-4 py-2.5 font-medium">Description</th>
+                                <th class="px-4 py-2.5 font-medium text-right">Points</th>
+                                <th class="px-4 py-2.5 font-medium text-right">Balance</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr v-for="txn in loyaltyTransactions.data" :key="txn.id" class="hover:bg-muted/20">
+                                <td class="px-4 py-2.5 text-muted-foreground text-xs whitespace-nowrap">{{ formatDate(txn.created_at) }}</td>
+                                <td class="px-4 py-2.5">
+                                    <span class="inline-flex items-center gap-1 text-xs font-medium rounded-full px-2 py-0.5"
+                                        :class="{
+                                            'bg-green-100 text-green-700': txn.type === 'earn',
+                                            'bg-red-100 text-red-700': txn.type === 'redeem',
+                                            'bg-amber-100 text-amber-700': txn.type === 'adjust',
+                                            'bg-muted text-muted-foreground': !['earn','redeem','adjust'].includes(txn.type),
+                                        }"
+                                    >
+                                        <TrendingUp v-if="txn.type === 'earn'" class="h-3 w-3" />
+                                        <TrendingDown v-else-if="txn.type === 'redeem'" class="h-3 w-3" />
+                                        {{ txn.type.charAt(0).toUpperCase() + txn.type.slice(1) }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-2.5 text-muted-foreground">{{ txn.description ?? '—' }}</td>
+                                <td class="px-4 py-2.5 text-right tabular-nums font-medium"
+                                    :class="txn.points >= 0 ? 'text-green-600' : 'text-red-600'"
+                                >{{ txn.points >= 0 ? '+' : '' }}{{ txn.points.toLocaleString() }}</td>
+                                <td class="px-4 py-2.5 text-right tabular-nums text-amber-600 font-medium">
+                                    {{ txn.running_balance.toLocaleString() }} pts
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <AppPagination :meta="loyaltyTransactions" />
             </div>
         </div>
 

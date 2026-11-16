@@ -17,7 +17,7 @@ class Product extends Model
     protected $fillable = [
         'category_id', 'name', 'description', 'sku', 'barcode',
         'unit_of_measure', 'cost_price', 'selling_price', 'vat_type',
-        'stock_quantity', 'minimum_stock', 'is_active', 'image_path',
+        'stock_quantity', 'minimum_stock', 'is_active', 'is_bundle', 'image_path',
     ];
 
     protected function casts(): array
@@ -25,6 +25,7 @@ class Product extends Model
         return [
             'vat_type'       => VatType::class,
             'is_active'      => 'boolean',
+            'is_bundle'      => 'boolean',
             'cost_price'     => 'integer',
             'selling_price'  => 'integer',
             'stock_quantity' => 'integer',
@@ -76,6 +77,11 @@ class Product extends Model
     public function saleItems(): HasMany
     {
         return $this->hasMany(SaleItem::class);
+    }
+
+    public function bundleItems(): HasMany
+    {
+        return $this->hasMany(ProductBundleItem::class, 'bundle_id');
     }
 
     public function scopeActive($query)

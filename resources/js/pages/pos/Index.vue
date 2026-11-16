@@ -6,12 +6,15 @@ import { useSettingsStore } from '@/stores/settings';
 import { useCurrency } from '@/composables/useCurrency';
 
 import ProductSearch from '@/components/pos/ProductSearch.vue';
+import ProductGrid from '@/components/pos/ProductGrid.vue';
 import CartItem from '@/components/pos/CartItem.vue';
 import CartSummary from '@/components/pos/CartSummary.vue';
 import PaymentModal from '@/components/pos/PaymentModal.vue';
 import DiscountModal from '@/components/pos/DiscountModal.vue';
 import HoldTransactionPanel from '@/components/pos/HoldTransactionPanel.vue';
 import SupervisorAuthModal from '@/components/pos/SupervisorAuthModal.vue';
+import CloseShiftModal from '@/components/pos/CloseShiftModal.vue';
+import SeniorPwdModal from '@/components/pos/SeniorPwdModal.vue';
 
 import type { Category, PaymentMethod, Shift } from '@/types/models';
 import type { POSSettings } from '@/types/pos';
@@ -119,6 +122,9 @@ function handleGlobalKey(e: KeyboardEvent) {
 onMounted(() => window.addEventListener('keydown', handleGlobalKey));
 
 const hasActiveShift = computed(() => pos.shift !== null);
+
+// ── Panel mode: search vs browse ──────────────────────────────────────────
+const panelMode = ref<'search' | 'browse'>('search');
 </script>
 
 <template>
@@ -166,6 +172,12 @@ const hasActiveShift = computed(() => pos.shift !== null);
             </div>
             <div class="ml-auto flex items-center gap-3">
                 <span class="text-muted-foreground text-xs">{{ currentTime }}</span>
+                <button
+                    v-if="hasActiveShift"
+                    class="rounded-lg border border-destructive/50 px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 transition-colors"
+                    @click="pos.openModal('close-shift')">
+                    Close Shift
+                </button>
                 <a
                     class="text-muted-foreground hover:text-foreground text-xs transition-colors"
                     href="/dashboard">
@@ -177,16 +189,43 @@ const hasActiveShift = computed(() => pos.shift !== null);
         <!-- ── Main Area ───────────────────────────────────────────────────── -->
         <div class="flex flex-1 overflow-hidden">
 
-            <!-- ── LEFT PANEL: Search + Cart ──────────────────────────── -->
+            <!-- ── LEFT PANEL: Search/Browse + Cart ───────────────────── -->
             <div class="flex flex-col border-r" style="width: 60%">
 
-                <!-- Search bar -->
-                <div class="border-b">
+                <!-- Mode toggle -->
+                <div class="flex border-b shrink-0">
+                    <button
+                        class="flex-1 py-2 text-xs font-medium transition-colors"
+                        :class="panelMode === 'search'
+                            ? 'border-b-2 border-primary text-primary bg-primary/5'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'"
+                        @click="panelMode = 'search'"
+                    >
+                        🔍 Search
+                    </button>
+                    <button
+                        class="flex-1 py-2 text-xs font-medium transition-colors"
+                        :class="panelMode === 'browse'
+                            ? 'border-b-2 border-primary text-primary bg-primary/5'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'"
+                        @click="panelMode = 'browse'"
+                    >
+                        📦 Browse
+                    </button>
+                </div>
+
+                <!-- Search bar (search mode) -->
+                <div v-if="panelMode === 'search'" class="border-b shrink-0">
                     <ProductSearch />
                 </div>
 
-                <!-- Cart items (scrollable) -->
-                <div class="flex-1 overflow-y-auto">
+                <!-- Browse mode: product grid -->
+                <div v-if="panelMode === 'browse'" class="flex-1 overflow-hidden">
+                    <ProductGrid :categories="props.categories" />
+                </div>
+
+                <!-- Search mode: cart items -->
+                <div v-else class="flex-1 overflow-y-auto">
                     <div v-if="cart.isEmpty" class="flex h-full flex-col items-center justify-center text-center p-8">
                         <div class="text-muted-foreground/30 text-6xl mb-4">🛒</div>
                         <div class="text-muted-foreground font-medium">Cart is empty</div>
@@ -270,7 +309,7 @@ const hasActiveShift = computed(() => pos.shift !== null);
                 <!-- Action buttons -->
                 <div class="border-t p-3 space-y-2">
                     <!-- Secondary actions -->
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-2 gap-2">
                         <button
                             :disabled="cart.isEmpty"
                             class="rounded-lg border py-2 text-xs font-medium hover:bg-muted disabled:opacity-40 transition-colors"
@@ -282,6 +321,13 @@ const hasActiveShift = computed(() => pos.shift !== null);
                             class="rounded-lg border py-2 text-xs font-medium hover:bg-muted disabled:opacity-40 transition-colors"
                             @click="pos.openModal('discount')">
                             Discount
+                        </button>
+                        <button
+                            :disabled="cart.isEmpty"
+                            class="rounded-lg border py-2 text-xs font-medium hover:bg-muted disabled:opacity-40 transition-colors"
+                            :class="cart.isSeniorPwd ? 'border-emerald-500 text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30' : ''"
+                            @click="pos.openModal('senior-pwd')">
+                            {{ cart.isSeniorPwd ? 'SC/PWD ✓' : 'SC / PWD' }}
                         </button>
                         <button
                             :disabled="cart.isEmpty"
@@ -312,5 +358,7 @@ const hasActiveShift = computed(() => pos.shift !== null);
         <DiscountModal v-if="pos.activeModal === 'discount'" />
         <HoldTransactionPanel v-if="pos.activeModal === 'hold'" />
         <SupervisorAuthModal v-if="pos.activeModal === 'supervisor'" />
+        <CloseShiftModal v-if="pos.activeModal === 'close-shift'" />
+        <SeniorPwdModal v-if="pos.activeModal === 'senior-pwd'" />
     </div>
 </template>

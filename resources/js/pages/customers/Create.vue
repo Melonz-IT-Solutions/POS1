@@ -28,7 +28,7 @@ function submit() {
         { title: 'Customers', href: CustomerController.index.url() },
         { title: 'New Customer', href: CustomerController.create.url() },
     ]">
-        <div class="mx-auto max-w-xl p-6 space-y-6">
+        <div class="max-w-xl p-6 space-y-6">
             <div>
                 <h1 class="text-2xl font-bold">New Customer</h1>
                 <p class="text-muted-foreground text-sm">Add a customer to your database</p>

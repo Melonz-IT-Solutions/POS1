@@ -35,6 +35,27 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $flashToast = null;
+        foreach (['success', 'error', 'warning', 'info'] as $type) {
+            if ($message = $request->session()->get($type)) {
+                $flashToast = ['type' => $type, 'message' => $message];
+                break;
+            }
+        }
+
+        $alerts = ['low_stock' => 0, 'draft_pos' => 0];
+        if ($user = $request->user()) {
+            $alerts['low_stock'] = \App\Models\Product::active()
+                ->where(function ($q) {
+                    $q->lowStock()->orWhere('stock_quantity', 0);
+                })
+                ->count();
+
+            if ($user->hasAnyRole(['Administrator', 'Manager'])) {
+                $alerts['draft_pos'] = \App\Models\PurchaseOrder::where('status', 'draft')->count();
+            }
+        }
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -42,6 +63,8 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'flash'        => ['toast' => $flashToast],
+            'alerts'       => $alerts,
         ];
     }
 }

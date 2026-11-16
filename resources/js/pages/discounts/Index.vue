@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
-import { Percent, Plus, RotateCcw, Search, Tag, Trash2, Pencil } from '@lucide/vue';
+import { Eye, Percent, Plus, RotateCcw, Search, Tag, Trash2, Pencil } from '@lucide/vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AppPagination from '@/components/AppPagination.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
@@ -31,12 +31,12 @@ const props = defineProps<{
 }>();
 
 const search = ref(props.filters.search ?? '');
-const statusFilter = ref(props.filters.status ?? '');
+const statusFilter = ref(props.filters.status ?? 'all');
 
 function applyFilters() {
     router.get(DiscountController.index.url(), {
         search: search.value || undefined,
-        status: statusFilter.value || undefined,
+        status: statusFilter.value === 'all' ? undefined : statusFilter.value,
     }, { preserveState: true, replace: true });
 }
 
@@ -126,7 +126,7 @@ function formatDate(s: string | null): string {
                         <SelectValue placeholder="All statuses" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All statuses</SelectItem>
+                        <SelectItem value="all">All statuses</SelectItem>
                         <SelectItem value="active">Active</SelectItem>
                         <SelectItem value="inactive">Inactive</SelectItem>
                         <SelectItem value="deleted">Deleted</SelectItem>
@@ -195,6 +195,11 @@ function formatDate(s: string | null): string {
                                         <RotateCcw class="h-4 w-4" />
                                     </Button>
                                     <template v-else>
+                                        <Button size="sm" variant="ghost" as-child title="View">
+                                            <a :href="DiscountController.show.url({ discount: d.id })">
+                                                <Eye class="h-4 w-4" />
+                                            </a>
+                                        </Button>
                                         <Button size="sm" variant="ghost" as-child title="Edit">
                                             <a :href="DiscountController.edit.url({ discount: d.id })">
                                                 <Pencil class="h-4 w-4" />

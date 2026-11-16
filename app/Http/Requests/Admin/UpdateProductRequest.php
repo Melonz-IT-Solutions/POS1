@@ -30,6 +30,7 @@ class UpdateProductRequest extends FormRequest
             'vat_type'            => ['required', new Enum(VatType::class)],
             'minimum_stock'       => ['required', 'integer', 'min:0'],
             'is_active'           => ['boolean'],
+            'is_bundle'           => ['boolean'],
             'image'               => ['nullable', 'image', 'max:2048'],
             'price_change_reason' => ['nullable', 'string', 'max:200'],
         ];
@@ -39,6 +40,7 @@ class UpdateProductRequest extends FormRequest
     {
         $this->merge([
             'is_active' => $this->boolean('is_active', true),
+            'is_bundle' => $this->boolean('is_bundle', false),
         ]);
     }
 }

@@ -5,6 +5,7 @@ import { useCartStore } from '@/stores/cart';
 import { useBarcode } from '@/composables/useBarcode';
 import type { ProductSearchResult } from '@/types/pos';
 import { useCurrency } from '@/composables/useCurrency';
+import ProductThumb from '@/components/pos/ProductThumb.vue';
 
 const cartStore = useCartStore();
 const { format } = useCurrency();
@@ -115,6 +116,10 @@ function onEnter() {
                 class="hover:bg-accent flex w-full items-center gap-3 px-4 py-3 text-left transition-colors"
                 type="button"
                 @click="selectProduct(product)">
+                <ProductThumb
+                    :image-path="product.image_path"
+                    :alt="product.name"
+                    class="h-10 w-10 rounded-md border" />
                 <div class="flex-1 min-w-0">
                     <div class="truncate font-medium">{{ product.name }}</div>
                     <div class="text-muted-foreground flex gap-2 text-xs">

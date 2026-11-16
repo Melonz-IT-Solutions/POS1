@@ -34,7 +34,7 @@ const props = defineProps<{
     filters: { product_id?: string; type?: string; date_from?: string; date_to?: string };
 }>();
 
-const typeFilter = ref(props.filters.type ?? '');
+const typeFilter = ref(props.filters.type ?? 'all');
 const dateFrom = ref(props.filters.date_from ?? '');
 const dateTo = ref(props.filters.date_to ?? '');
 
@@ -42,7 +42,7 @@ function applyFilters() {
     router.get(
         InventoryController.allMovements.url(),
         {
-            type: typeFilter.value || undefined,
+            type: typeFilter.value === 'all' ? undefined : typeFilter.value,
             date_from: dateFrom.value || undefined,
             date_to: dateTo.value || undefined,
         },
@@ -101,7 +101,7 @@ function formatDate(dt: string) {
                         <SelectValue placeholder="All types" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All types</SelectItem>
+                        <SelectItem value="all">All types</SelectItem>
                         <SelectItem v-for="mt in movementTypes" :key="mt.value" :value="mt.value">
                             {{ mt.label }}
                         </SelectItem>

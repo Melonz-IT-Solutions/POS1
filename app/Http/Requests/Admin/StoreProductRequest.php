@@ -29,6 +29,7 @@ class StoreProductRequest extends FormRequest
             'stock_quantity' => ['required', 'integer', 'min:0'],
             'minimum_stock'  => ['required', 'integer', 'min:0'],
             'is_active'      => ['boolean'],
+            'is_bundle'      => ['boolean'],
             'image'          => ['nullable', 'image', 'max:2048'],
         ];
     }
@@ -39,6 +40,7 @@ class StoreProductRequest extends FormRequest
         // The frontend should send centavos already, but we guard here
         $this->merge([
             'is_active' => $this->boolean('is_active', true),
+            'is_bundle' => $this->boolean('is_bundle', false),
         ]);
     }
 }

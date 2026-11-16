@@ -59,7 +59,11 @@ class CustomerController extends Controller
         $sales = $customer->sales()
             ->with('cashier:id,name')
             ->latest()
-            ->paginate(10);
+            ->paginate(10, ['*'], 'sales_page');
+
+        $loyaltyTransactions = $customer->loyaltyTransactions()
+            ->latest()
+            ->paginate(10, ['*'], 'loyalty_page');
 
         $stats = [
             'total_sales'      => $customer->sales()->where('status', 'completed')->count(),
@@ -69,9 +73,10 @@ class CustomerController extends Controller
         ];
 
         return Inertia::render('customers/Show', [
-            'customer' => $customer,
-            'sales'    => $sales,
-            'stats'    => $stats,
+            'customer'            => $customer,
+            'sales'               => $sales,
+            'loyaltyTransactions' => $loyaltyTransactions,
+            'stats'               => $stats,
         ]);
     }
 

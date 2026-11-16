@@ -2,13 +2,16 @@
 import { computed, ref, watch } from 'vue';
 import { useCartStore } from '@/stores/cart';
 import { usePosStore } from '@/stores/pos';
+import { useSettingsStore } from '@/stores/settings';
 import { useCurrency } from '@/composables/useCurrency';
 import NumpadInput from './NumpadInput.vue';
+import * as SaleController from '@/actions/App/Http/Controllers/POS/SaleController';
 import type { PaymentEntry } from '@/types/pos';
 import type { PaymentMethod } from '@/types/models';
 
-const cart   = useCartStore();
-const pos    = usePosStore();
+const cart     = useCartStore();
+const pos      = usePosStore();
+const settings = useSettingsStore();
 const { format } = useCurrency();
 
 const payments   = ref<PaymentEntry[]>([]);
@@ -18,7 +21,39 @@ const refNumber  = ref('');
 const error      = ref('');
 const success    = ref(false);
 
-const totalDue   = computed(() => cart.summary.total_amount);
+// ── Loyalty redemption state ───────────────────────────────────────────────
+const loyaltyPointsInput = ref(cart.loyaltyRedemption.points);
+
+const maxRedeemablePoints = computed(() => {
+    if (!cart.customer || !settings.loyaltyEnabled) return 0;
+    const maxByBalance  = cart.customer.loyalty_points;
+    const maxByTotal    = Math.floor(cart.summary.total_amount / settings.loyaltyRedeemRate);
+    return Math.min(maxByBalance, maxByTotal);
+});
+
+const loyaltyDiscount = computed(() =>
+    loyaltyPointsInput.value * settings.loyaltyRedeemRate
+);
+
+function applyLoyaltyRedemption() {
+    const pts = Math.min(loyaltyPointsInput.value, maxRedeemablePoints.value);
+    loyaltyPointsInput.value = pts;
+    cart.setLoyaltyRedemption(pts, settings.loyaltyRedeemRate);
+}
+
+function clearLoyaltyRedemption() {
+    loyaltyPointsInput.value = 0;
+    cart.setLoyaltyRedemption(0, settings.loyaltyRedeemRate);
+}
+
+const hasLoyalty = computed(() =>
+    settings.loyaltyEnabled &&
+    !!cart.customer &&
+    (cart.customer.loyalty_points ?? 0) > 0
+);
+
+// ── Totals ─────────────────────────────────────────────────────────────────
+const totalDue   = computed(() => Math.max(0, cart.summary.total_amount - cart.loyaltyRedemption.centavos));
 const totalPaid  = computed(() => payments.value.reduce((s, p) => s + p.amount, 0));
 const remaining  = computed(() => Math.max(0, totalDue.value - totalPaid.value));
 const change     = computed(() => Math.max(0, totalPaid.value - totalDue.value));
@@ -80,6 +115,7 @@ async function confirm() {
             sc_id_no:       cart.isSeniorPwd ? cart.seniorPwd.sc_id_no : null,
             pwd_name:       cart.isSeniorPwd ? cart.seniorPwd.pwd_name : null,
             pwd_id_no:      cart.isSeniorPwd ? cart.seniorPwd.pwd_id_no : null,
+            redeem_points:  cart.loyaltyRedemption.points,
         };
 
         const csrfMeta = document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]');
@@ -118,15 +154,17 @@ function close() {
     if (success.value) {
         success.value = false;
     }
+    clearLoyaltyRedemption();
     pos.closeModal();
-    payments.value     = [];
-    activeMethod.value = null;
+    payments.value      = [];
+    activeMethod.value  = null;
     currentAmount.value = 0;
     error.value         = '';
 }
 
 function printReceipt() {
-    window.print();
+    if (!pos.lastCompletedSale?.id) return;
+    window.open(SaleController.receipt.url({ sale: pos.lastCompletedSale.id }), '_blank');
 }
 
 // Set default cash payment when modal opens
@@ -196,6 +234,51 @@ watch(
                     <div class="rounded-lg bg-primary/5 border border-primary/20 p-4 text-center">
                         <div class="text-muted-foreground text-sm">Total Due</div>
                         <div class="text-primary text-3xl font-bold">{{ format(totalDue) }}</div>
+                        <div v-if="cart.loyaltyRedemption.centavos > 0" class="text-xs text-emerald-600 mt-1">
+                            Points discount: -{{ format(cart.loyaltyRedemption.centavos) }}
+                        </div>
+                    </div>
+
+                    <!-- Loyalty redemption -->
+                    <div v-if="hasLoyalty" class="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 p-3">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <span class="text-sm font-medium">Loyalty Points</span>
+                                <span class="ml-2 text-xs text-muted-foreground">
+                                    {{ cart.customer!.loyalty_points }} pts available
+                                    ({{ format(cart.customer!.loyalty_points * settings.loyaltyRedeemRate) }})
+                                </span>
+                            </div>
+                            <button
+                                v-if="cart.loyaltyRedemption.points > 0"
+                                class="text-xs text-destructive hover:underline"
+                                @click="clearLoyaltyRedemption">
+                                Clear
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input
+                                v-model.number="loyaltyPointsInput"
+                                type="number"
+                                min="0"
+                                :max="maxRedeemablePoints"
+                                class="border-input bg-background w-24 rounded border px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                                placeholder="0"
+                                @keydown.enter="applyLoyaltyRedemption"
+                            />
+                            <span class="text-xs text-muted-foreground">pts = {{ format(loyaltyDiscount) }}</span>
+                            <button
+                                :disabled="loyaltyPointsInput <= 0 || loyaltyPointsInput > maxRedeemablePoints"
+                                class="rounded bg-amber-500 text-white px-3 py-1 text-xs font-medium hover:bg-amber-600 disabled:opacity-50 transition-colors"
+                                @click="applyLoyaltyRedemption">
+                                Apply
+                            </button>
+                            <button
+                                class="text-xs text-muted-foreground hover:text-foreground"
+                                @click="loyaltyPointsInput = maxRedeemablePoints; applyLoyaltyRedemption()">
+                                Use all
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Payment methods -->
@@ -263,7 +346,7 @@ watch(
                 </div>
 
                 <!-- Right: Numpad -->
-                <div class="flex flex-col border-l p-5" style="width: 220px">
+                <div class="flex flex-col border-l p-5" style="width: 320px">
                     <NumpadInput
                         v-if="activeMethod"
                         v-model="currentAmount"

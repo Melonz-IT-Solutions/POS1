@@ -63,7 +63,7 @@ function submitPin() {
         { title: 'Users', href: UserController.index.url() },
         { title: user.name, href: UserController.edit.url({ user: user.id }) },
     ]">
-        <div class="mx-auto max-w-xl p-6 space-y-6">
+        <div class="max-w-xl p-6 space-y-6">
             <div class="flex items-start justify-between">
                 <div>
                     <h1 class="text-2xl font-bold">Edit User</h1>

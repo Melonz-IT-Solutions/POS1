@@ -68,6 +68,18 @@ class DiscountController extends Controller
             ->with('success', "Discount \"{$discount->name}\" created.");
     }
 
+    public function show(Discount $discount): Response
+    {
+        $this->authorize('view', $discount);
+
+        $discount->load(['products:id,name,sku', 'categories:id,name', 'customers:id,name,phone']);
+
+        return Inertia::render('discounts/Show', [
+            'discount' => $discount,
+            'canEdit'  => auth()->user()->can('update', $discount),
+        ]);
+    }
+
     public function edit(Discount $discount): Response
     {
         $this->authorize('update', $discount);

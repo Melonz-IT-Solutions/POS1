@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import {
-    Mail, Phone, Plus, RotateCcw, Search, Star, Trash2, UserRound,
+    Mail, Phone, Plus, RotateCcw, Search, Star, Trash2, Upload, UserRound,
 } from '@lucide/vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AppPagination from '@/components/AppPagination.vue';
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/select';
 import { useCurrency } from '@/composables/useCurrency';
 import * as CustomerController from '@/actions/App/Http/Controllers/Admin/CustomerController';
+import * as CustomerImportController from '@/actions/App/Http/Controllers/Admin/CustomerImportController';
 import type { Customer } from '@/types/models';
 
 interface PaginatedCustomers {
@@ -35,12 +36,12 @@ const props = defineProps<{
 const { format } = useCurrency();
 
 const search = ref(props.filters.search ?? '');
-const statusFilter = ref(props.filters.status ?? '');
+const statusFilter = ref(props.filters.status ?? 'all');
 
 function applyFilters() {
     router.get(
         CustomerController.index.url(),
-        { search: search.value || undefined, status: statusFilter.value || undefined },
+        { search: search.value || undefined, status: statusFilter.value === 'all' ? undefined : statusFilter.value },
         { preserveState: true, replace: true },
     );
 }
@@ -73,12 +74,20 @@ function avatarInitials(name: string) {
                     <h1 class="text-2xl font-bold">Customers</h1>
                     <p class="text-muted-foreground text-sm">{{ customers.total }} customers total</p>
                 </div>
-                <Button as-child>
-                    <a :href="CustomerController.create.url()">
-                        <Plus class="mr-2 h-4 w-4" />
-                        New Customer
-                    </a>
-                </Button>
+                <div class="flex gap-2">
+                    <Button variant="outline" as-child>
+                        <a :href="CustomerImportController.create.url()">
+                            <Upload class="mr-2 h-4 w-4" />
+                            Import CSV
+                        </a>
+                    </Button>
+                    <Button as-child>
+                        <a :href="CustomerController.create.url()">
+                            <Plus class="mr-2 h-4 w-4" />
+                            New Customer
+                        </a>
+                    </Button>
+                </div>
             </div>
 
             <!-- Filters -->
@@ -92,7 +101,7 @@ function avatarInitials(name: string) {
                         <SelectValue placeholder="All statuses" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All statuses</SelectItem>
+                        <SelectItem value="all">All statuses</SelectItem>
                         <SelectItem value="active">Active</SelectItem>
                         <SelectItem value="inactive">Inactive</SelectItem>
                         <SelectItem value="deleted">Deleted</SelectItem>

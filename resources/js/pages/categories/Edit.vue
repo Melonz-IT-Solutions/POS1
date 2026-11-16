@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import InputError from '@/components/InputError.vue';
@@ -26,6 +27,11 @@ const form = useForm({
     sort_order: props.category.sort_order,
 });
 
+const parentIdSelect = computed({
+    get: () => form.parent_id || 'none',
+    set: (val: string) => { form.parent_id = val === 'none' ? '' : val; },
+});
+
 function submit() {
     form.put(CategoryController.update.url({ category: props.category.id }), {
         preserveScroll: true,
@@ -38,7 +44,7 @@ function submit() {
         { title: 'Categories', href: CategoryController.index.url() },
         { title: category.name, href: CategoryController.edit.url({ category: category.id }) },
     ]">
-        <div class="mx-auto max-w-xl p-6 space-y-6">
+        <div class="max-w-xl p-6 space-y-6">
             <div>
                 <h1 class="text-2xl font-bold">Edit Category</h1>
                 <p class="text-muted-foreground text-sm">{{ category.name }}</p>
@@ -70,12 +76,12 @@ function submit() {
 
                 <div class="space-y-1.5">
                     <Label>Parent Category</Label>
-                    <Select v-model="form.parent_id">
+                    <Select v-model="parentIdSelect">
                         <SelectTrigger>
                             <SelectValue placeholder="None (top-level)" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="">None (top-level)</SelectItem>
+                            <SelectItem value="none">None (top-level)</SelectItem>
                             <SelectItem
                                 v-for="cat in parentCategories"
                                 :key="cat.id"

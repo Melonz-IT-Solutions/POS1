@@ -27,12 +27,12 @@ class SalePolicy
         return $user->hasPermissionTo('create sales');
     }
 
-    public function void(User $user, Sale $sale): bool
+    public function void(User $user, ?Sale $sale = null): bool
     {
         return $user->hasPermissionTo('void sales');
     }
 
-    public function refund(User $user, Sale $sale): bool
+    public function refund(User $user, ?Sale $sale = null): bool
     {
         return $user->hasPermissionTo('refund sales');
     }

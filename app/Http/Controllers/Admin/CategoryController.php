@@ -46,6 +46,35 @@ class CategoryController extends Controller
             ->with('success', 'Category created successfully.');
     }
 
+    public function show(Category $category): Response
+    {
+        $this->authorize('view', $category);
+
+        $category->load([
+            'parent:id,name',
+            'children' => fn ($q) => $q->withCount('products')->withTrashed(),
+        ]);
+
+        $products = $category->products()
+            ->with('category:id,name')
+            ->orderBy('name')
+            ->get(['id', 'name', 'sku', 'selling_price', 'stock_quantity', 'minimum_stock', 'is_active', 'deleted_at']);
+
+        $stats = [
+            'total_products'  => $products->count(),
+            'active_products' => $products->whereNull('deleted_at')->where('is_active', true)->count(),
+            'total_stock'     => (int) $products->whereNull('deleted_at')->sum('stock_quantity'),
+            'stock_value'     => (int) $products->whereNull('deleted_at')->sum(fn ($p) => $p->stock_quantity * $p->selling_price),
+        ];
+
+        return Inertia::render('categories/Show', [
+            'category' => $category,
+            'products' => $products,
+            'stats'    => $stats,
+            'canEdit'  => auth()->user()->can('update', $category),
+        ]);
+    }
+
     public function edit(Category $category): Response
     {
         return Inertia::render('categories/Edit', [

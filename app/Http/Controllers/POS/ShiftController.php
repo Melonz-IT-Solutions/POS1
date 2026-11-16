@@ -60,6 +60,34 @@ class ShiftController extends Controller
         ]);
     }
 
+    public function summary(Request $request): JsonResponse
+    {
+        $shift = $request->user()->currentShift();
+
+        if (! $shift) {
+            return response()->json(['error' => 'No open shift.'], 404);
+        }
+
+        $cashSales = (int) $shift->sales()
+            ->where('status', 'completed')
+            ->join('sale_payments', 'sales.id', '=', 'sale_payments.sale_id')
+            ->where('sale_payments.payment_method', 'cash')
+            ->sum('sale_payments.amount');
+
+        $cashIn  = $shift->totalCashIn();
+        $cashOut = $shift->totalCashOut();
+
+        return response()->json([
+            'opening_float'     => (int) $shift->opening_float,
+            'cash_sales'        => $cashSales,
+            'cash_in'           => $cashIn,
+            'cash_out'          => $cashOut,
+            'expected_cash'     => (int) $shift->opening_float + $cashSales + $cashIn - $cashOut,
+            'total_sales'       => (int) $shift->sales()->where('status', 'completed')->sum('total_amount'),
+            'transaction_count' => $shift->sales()->where('status', 'completed')->count(),
+        ]);
+    }
+
     public function cashIn(Request $request): JsonResponse
     {
         $validated = $request->validate([

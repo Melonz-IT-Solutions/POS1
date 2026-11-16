@@ -15,8 +15,18 @@ const { format } = useCurrency();
         </div>
 
         <div v-if="cart.summary.discount_amount > 0" class="flex justify-between text-green-600">
-            <span>Discount</span>
+            <span class="flex items-center gap-1.5">
+                Discount
+                <span
+                    v-if="cart.isSeniorPwd"
+                    class="rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide"
+                >SC/PWD 20%</span>
+            </span>
             <span>-{{ format(cart.summary.discount_amount) }}</span>
+        </div>
+        <div v-if="cart.forceVatExempt" class="text-xs text-emerald-600 dark:text-emerald-400 flex justify-between">
+            <span>VAT Exempt (SC/PWD)</span>
+            <span>applied</span>
         </div>
 
         <div class="text-muted-foreground border-t pt-1 mt-1 space-y-0.5 text-xs">

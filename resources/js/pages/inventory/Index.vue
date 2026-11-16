@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { router, useForm } from '@inertiajs/vue3';
 import {
     AlertTriangle,
     BarChart3,
     Box,
     ClipboardList,
+    Download,
     PackageOpen,
     Search,
     TrendingDown,
@@ -53,16 +54,16 @@ const props = defineProps<{
 const { format } = useCurrency();
 
 const search = ref(props.filters.search ?? '');
-const categoryFilter = ref(props.filters.category_id ?? '');
-const stockStatus = ref(props.filters.stock_status ?? '');
+const categoryFilter = ref(props.filters.category_id ?? 'all');
+const stockStatus = ref(props.filters.stock_status ?? 'all');
 
 function applyFilters() {
     router.get(
         InventoryController.index.url(),
         {
             search: search.value || undefined,
-            category_id: categoryFilter.value || undefined,
-            stock_status: stockStatus.value || undefined,
+            category_id: categoryFilter.value === 'all' ? undefined : categoryFilter.value,
+            stock_status: stockStatus.value === 'all' ? undefined : stockStatus.value,
         },
         { preserveState: true, replace: true },
     );
@@ -90,6 +91,15 @@ function openAdjust(product: Product) {
     adjustOpen.value = true;
 }
 
+const exportUrl = computed(() => {
+    const params = new URLSearchParams();
+    if (search.value)                        params.set('search', search.value);
+    if (categoryFilter.value !== 'all')      params.set('category_id', categoryFilter.value);
+    if (stockStatus.value !== 'all')         params.set('stock_status', stockStatus.value);
+    const qs = params.toString();
+    return InventoryController.exportMethod.url() + (qs ? '?' + qs : '');
+});
+
 function submitAdjust() {
     if (!adjustProduct.value) return;
     adjustForm.post(InventoryController.adjust.url({ product: adjustProduct.value.id }), {
@@ -108,12 +118,26 @@ function submitAdjust() {
                     <h1 class="text-2xl font-bold">Stock Overview</h1>
                     <p class="text-muted-foreground text-sm">Monitor and adjust inventory levels</p>
                 </div>
-                <Button variant="outline" as-child>
-                    <a :href="InventoryController.allMovements.url()">
-                        <ClipboardList class="mr-2 h-4 w-4" />
-                        All Movements
-                    </a>
-                </Button>
+                <div class="flex items-center gap-2">
+                    <Button v-if="stats.low_stock_count > 0 || stats.out_of_stock > 0" variant="destructive" size="sm" as-child>
+                        <a :href="InventoryController.reorder.url()">
+                            <AlertTriangle class="mr-2 h-4 w-4" />
+                            Reorder Dashboard ({{ stats.low_stock_count + stats.out_of_stock }})
+                        </a>
+                    </Button>
+                    <Button variant="outline" size="sm" as-child>
+                        <a :href="exportUrl" download>
+                            <Download class="mr-1.5 h-4 w-4" />
+                            Export CSV
+                        </a>
+                    </Button>
+                    <Button variant="outline" as-child>
+                        <a :href="InventoryController.allMovements.url()">
+                            <ClipboardList class="mr-2 h-4 w-4" />
+                            All Movements
+                        </a>
+                    </Button>
+                </div>
             </div>
 
             <!-- Stats -->
@@ -164,7 +188,7 @@ function submitAdjust() {
                         <SelectValue placeholder="All categories" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All categories</SelectItem>
+                        <SelectItem value="all">All categories</SelectItem>
                         <SelectItem v-for="cat in categories" :key="cat.id" :value="String(cat.id)">
                             {{ cat.name }}
                         </SelectItem>
@@ -175,7 +199,7 @@ function submitAdjust() {
                         <SelectValue placeholder="All stock" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All stock</SelectItem>
+                        <SelectItem value="all">All stock</SelectItem>
                         <SelectItem value="in_stock">In Stock</SelectItem>
                         <SelectItem value="low">Low Stock</SelectItem>
                         <SelectItem value="out">Out of Stock</SelectItem>

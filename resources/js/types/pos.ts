@@ -7,6 +7,7 @@ export interface CartItem {
     product_name: string;
     product_sku: string;
     product_barcode: string | null;
+    product_image?: string | null;
     unit_price: number;        // centavos
     cost_price: number;        // centavos
     vat_type: VatType;
@@ -61,6 +62,7 @@ export interface POSSettings {
     vat_rate: number;
     currency_symbol: string;
     loyalty_enabled: boolean;
+    loyalty_redeem_rate: number; // centavos per point
     max_cashier_disc: number;  // basis points
 }
 
@@ -88,6 +90,7 @@ export interface CheckoutPayload {
     sc_id_no: string | null;
     pwd_name: string | null;
     pwd_id_no: string | null;
+    redeem_points: number;
 }
 
 // ─── Product search result ─────────────────────────────────────────────────

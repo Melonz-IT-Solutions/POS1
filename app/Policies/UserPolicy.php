@@ -11,6 +11,11 @@ class UserPolicy
         return $user->can('view users');
     }
 
+    public function view(User $authUser, User $user): bool
+    {
+        return $authUser->can('view users');
+    }
+
     public function create(User $user): bool
     {
         return $user->can('create users');

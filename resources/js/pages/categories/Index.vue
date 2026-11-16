@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { router, useForm } from '@inertiajs/vue3';
-import { FolderOpen, Pencil, Plus, RotateCcw, Trash2 } from '@lucide/vue';
+import { Eye, FolderOpen, Pencil, Plus, RotateCcw, Trash2 } from '@lucide/vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import ConfirmDialog from '@/components/ConfirmDialog.vue';
 import { Button } from '@/components/ui/button';
@@ -85,6 +85,11 @@ function restore(id: number) {
                                         </Button>
                                         <template v-else>
                                             <Button size="sm" variant="ghost" as-child>
+                                                <a :href="CategoryController.show.url({ category: cat.id })" title="View">
+                                                    <Eye class="h-4 w-4" />
+                                                </a>
+                                            </Button>
+                                            <Button size="sm" variant="ghost" as-child>
                                                 <a :href="CategoryController.edit.url({ category: cat.id })" title="Edit">
                                                     <Pencil class="h-4 w-4" />
                                                 </a>
@@ -120,6 +125,11 @@ function restore(id: number) {
                                             <RotateCcw class="h-3.5 w-3.5" />
                                         </Button>
                                         <template v-else>
+                                            <Button size="sm" variant="ghost" as-child>
+                                                <a :href="CategoryController.show.url({ category: child.id })" title="View">
+                                                    <Eye class="h-3.5 w-3.5" />
+                                                </a>
+                                            </Button>
                                             <Button size="sm" variant="ghost" as-child>
                                                 <a :href="CategoryController.edit.url({ category: child.id })" title="Edit">
                                                     <Pencil class="h-3.5 w-3.5" />

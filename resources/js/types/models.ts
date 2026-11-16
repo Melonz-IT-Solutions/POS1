@@ -65,11 +65,21 @@ export interface Product {
     stock_quantity: number;
     minimum_stock: number;
     is_active: boolean;
+    is_bundle: boolean;
     image_path: string | null;
     category?: Category;
+    bundleItems?: ProductBundleItem[];
     created_at: string;
     updated_at: string;
     deleted_at: string | null;
+}
+
+export interface ProductBundleItem {
+    id: number;
+    bundle_id: number;
+    component_id: number;
+    quantity: number;
+    component?: Pick<Product, 'id' | 'name' | 'sku' | 'selling_price'>;
 }
 
 export interface Customer {
@@ -123,10 +133,11 @@ export interface PaymentMethod {
     id: number;
     name: string;
     code: PaymentMethodCode;
-    type: 'cash' | 'card' | 'digital_wallet';
+    type: 'cash' | 'card' | 'digital_wallet' | 'other';
     requires_reference: boolean;
     is_active: boolean;
     sort_order: number;
+    created_at: string;
 }
 
 export interface Shift {
@@ -200,6 +211,17 @@ export interface SalePayment {
     payment_method: PaymentMethodCode;
     amount: number;
     reference_number: string | null;
+}
+
+export interface LoyaltyTransaction {
+    id: number;
+    customer_id: number;
+    sale_id: number | null;
+    type: 'earn' | 'redeem' | 'adjust' | string;
+    points: number;
+    running_balance: number;
+    description: string | null;
+    created_at: string;
 }
 
 export interface StockMovement {
@@ -288,6 +310,101 @@ export interface PurchaseReceiptItem {
     quantity_received: number;
     unit_cost: number;
     product?: Pick<Product, 'id' | 'name' | 'sku'>;
+}
+
+// ─── Layaway ──────────────────────────────────────────────────────────────
+
+export interface Layaway {
+    id: number;
+    layaway_number: string;
+    customer_id: number;
+    total_amount: number;      // centavos
+    deposit_paid: number;      // centavos
+    balance: number;           // centavos
+    due_date: string | null;
+    status: 'active' | 'completed' | 'cancelled';
+    notes: string | null;
+    created_by: number;
+    completed_at: string | null;
+    cancelled_at: string | null;
+    created_at: string;
+    customer?: Pick<Customer, 'id' | 'name' | 'phone' | 'email'>;
+    creator?: Pick<User, 'id' | 'name'>;
+    items?: LayawayItem[];
+    payments?: LayawayPayment[];
+}
+
+export interface LayawayItem {
+    id: number;
+    layaway_id: number;
+    product_id: number | null;
+    product_name: string;
+    product_sku: string;
+    quantity: number;
+    unit_price: number;       // centavos
+    total: number;            // centavos
+}
+
+export interface LayawayPayment {
+    id: number;
+    layaway_id: number;
+    amount: number;            // centavos
+    payment_method: string;
+    reference: string | null;
+    received_by: number;
+    notes: string | null;
+    created_at: string;
+    receiver?: Pick<User, 'id' | 'name'>;
+}
+
+// ─── Gift Cards ───────────────────────────────────────────────────────────
+
+export interface GiftCard {
+    id: number;
+    code: string;
+    initial_value: number;    // centavos
+    current_balance: number;  // centavos
+    issued_to: string | null;
+    customer_id: number | null;
+    status: 'active' | 'depleted' | 'cancelled' | 'expired';
+    expires_at: string | null;
+    issued_by: number;
+    notes: string | null;
+    created_at: string;
+    issuer?: Pick<User, 'id' | 'name'>;
+    customer?: Pick<Customer, 'id' | 'name' | 'phone'>;
+    transactions?: GiftCardTransaction[];
+}
+
+export interface GiftCardTransaction {
+    id: number;
+    gift_card_id: number;
+    type: 'issue' | 'redeem' | 'cancel' | 'adjust';
+    amount: number;            // centavos (negative for deductions)
+    balance_before: number;
+    balance_after: number;
+    sale_id: number | null;
+    processed_by: number;
+    notes: string | null;
+    created_at: string;
+    processor?: Pick<User, 'id' | 'name'>;
+}
+
+// ─── Expense ──────────────────────────────────────────────────────────────
+
+export interface Expense {
+    id: number;
+    category: string;
+    description: string;
+    amount: number;
+    expense_date: string;
+    reference: string | null;
+    shift_id: number | null;
+    recorded_by: number;
+    notes: string | null;
+    recorder?: Pick<User, 'id' | 'name'>;
+    created_at: string;
+    updated_at: string;
 }
 
 // ─── Paginated Response ────────────────────────────────────────────────────

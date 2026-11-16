@@ -77,6 +77,37 @@ class SupplierController extends Controller
             ->with('success', "Supplier \"{$supplier->company_name}\" created.");
     }
 
+    public function show(Supplier $supplier): Response
+    {
+        $this->authorize('view', $supplier);
+
+        $supplier->load(['products:id,name,sku,selling_price,stock_quantity,minimum_stock,is_active']);
+
+        $recentOrders = $supplier->purchaseOrders()
+            ->with('orderedBy:id,name')
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        $totalSpend = (int) $supplier->purchaseOrders()
+            ->whereIn('status', ['received', 'partially_received'])
+            ->sum('subtotal');
+
+        return Inertia::render('suppliers/Show', [
+            'supplier'     => $supplier,
+            'recentOrders' => $recentOrders,
+            'stats'        => [
+                'products_count' => $supplier->products()->count(),
+                'orders_count'   => $supplier->purchaseOrders()->count(),
+                'total_spend'    => $totalSpend,
+                'pending_orders' => $supplier->purchaseOrders()
+                    ->whereIn('status', ['draft', 'ordered', 'partially_received'])
+                    ->count(),
+            ],
+            'canEdit' => auth()->user()->can('update', $supplier),
+        ]);
+    }
+
     public function edit(Supplier $supplier): Response
     {
         $this->authorize('update', $supplier);

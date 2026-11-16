@@ -32,12 +32,12 @@ const props = defineProps<{
 }>();
 
 const search = ref(props.filters.search ?? '');
-const statusFilter = ref(props.filters.status ?? '');
+const statusFilter = ref(props.filters.status ?? 'all');
 
 function applyFilters() {
     router.get(PurchaseOrderController.index.url(), {
         search: search.value || undefined,
-        status: statusFilter.value || undefined,
+        status: statusFilter.value === 'all' ? undefined : statusFilter.value,
     }, { preserveState: true, replace: true });
 }
 
@@ -97,7 +97,7 @@ function peso(c: number): string {
                         <SelectValue placeholder="All statuses" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All statuses</SelectItem>
+                        <SelectItem value="all">All statuses</SelectItem>
                         <SelectItem v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label }}</SelectItem>
                     </SelectContent>
                 </Select>

@@ -20,5 +20,6 @@ readonly class CreateSaleData
         public ?string $sc_id_no = null,
         public ?string $pwd_name = null,
         public ?string $pwd_id_no = null,
+        public int $redeem_points = 0,
     ) {}
 }

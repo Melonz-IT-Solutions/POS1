@@ -90,7 +90,7 @@ function submit() {
         { title: 'Purchase Orders', href: PurchaseOrderController.index.url() },
         { title: 'New PO', href: PurchaseOrderController.create.url() },
     ]">
-        <div class="mx-auto max-w-4xl p-6 space-y-6">
+        <div class="max-w-4xl p-6 space-y-6">
             <div>
                 <h1 class="text-2xl font-bold">New Purchase Order</h1>
                 <p class="text-muted-foreground text-sm">Create a purchase order for a supplier</p>

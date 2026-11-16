@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import {
-    KeyRound, Pencil, Plus, RotateCcw, Search, ShieldCheck, Trash2, UserRound,
+    Eye, KeyRound, Pencil, Plus, RotateCcw, Search, ShieldCheck, Trash2, UserRound,
 } from '@lucide/vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AppPagination from '@/components/AppPagination.vue';
@@ -35,14 +35,14 @@ const props = defineProps<{
 }>();
 
 const search = ref(props.filters.search ?? '');
-const roleFilter = ref(props.filters.role ?? '');
-const statusFilter = ref(props.filters.status ?? '');
+const roleFilter = ref(props.filters.role ?? 'all');
+const statusFilter = ref(props.filters.status ?? 'all');
 
 function applyFilters() {
     router.get(UserController.index.url(), {
         search: search.value || undefined,
-        role: roleFilter.value || undefined,
-        status: statusFilter.value || undefined,
+        role: roleFilter.value === 'all' ? undefined : roleFilter.value,
+        status: statusFilter.value === 'all' ? undefined : statusFilter.value,
     }, { preserveState: true, replace: true });
 }
 
@@ -99,7 +99,7 @@ function initials(name: string) {
                         <SelectValue placeholder="All roles" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All roles</SelectItem>
+                        <SelectItem value="all">All roles</SelectItem>
                         <SelectItem v-for="r in roles" :key="r" :value="r">{{ r }}</SelectItem>
                     </SelectContent>
                 </Select>
@@ -108,7 +108,7 @@ function initials(name: string) {
                         <SelectValue placeholder="All statuses" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="">All statuses</SelectItem>
+                        <SelectItem value="all">All statuses</SelectItem>
                         <SelectItem value="active">Active</SelectItem>
                         <SelectItem value="inactive">Inactive</SelectItem>
                         <SelectItem value="deleted">Deleted</SelectItem>
@@ -174,6 +174,11 @@ function initials(name: string) {
                                         <RotateCcw class="h-4 w-4" />
                                     </Button>
                                     <template v-else>
+                                        <Button size="sm" variant="ghost" as-child title="View">
+                                            <a :href="UserController.show.url({ user: user.id })">
+                                                <Eye class="h-4 w-4" />
+                                            </a>
+                                        </Button>
                                         <Button size="sm" variant="ghost" as-child title="Edit">
                                             <a :href="UserController.edit.url({ user: user.id })">
                                                 <Pencil class="h-4 w-4" />

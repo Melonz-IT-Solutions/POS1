@@ -14,6 +14,7 @@ use App\Models\PurchaseOrderItem;
 use App\Models\PurchaseReceipt;
 use App\Models\PurchaseReceiptItem;
 use App\Models\StockMovement;
+use App\Models\Setting;
 use App\Models\Supplier;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -108,6 +109,26 @@ class PurchaseOrderController extends Controller
 
         return redirect()->route('admin.purchases.show', $order)
             ->with('success', "Purchase order {$order->po_number} created.");
+    }
+
+    public function print(PurchaseOrder $purchase): Response
+    {
+        $this->authorize('view', $purchase);
+
+        $purchase->load([
+            'supplier:id,company_name,contact_person,phone,email,address',
+            'orderedBy:id,name',
+            'items.product:id,name,sku',
+        ]);
+
+        return Inertia::render('purchases/Print', [
+            'order'           => $purchase,
+            'business_name'   => Setting::get('business_name',    'My Store'),
+            'business_address'=> Setting::get('business_address', ''),
+            'business_phone'  => Setting::get('business_phone',   ''),
+            'business_tin'    => Setting::get('business_tin',     ''),
+            'business_email'  => Setting::get('business_email',   ''),
+        ]);
     }
 
     public function show(PurchaseOrder $purchase): Response

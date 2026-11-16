@@ -41,6 +41,9 @@ class StoreSaleRequest extends FormRequest
             'sc_id_no'  => ['nullable', 'string', 'max:50'],
             'pwd_name'  => ['nullable', 'string', 'max:255'],
             'pwd_id_no' => ['nullable', 'string', 'max:50'],
+
+            // Loyalty
+            'redeem_points' => ['nullable', 'integer', 'min:0'],
         ];
     }
 }

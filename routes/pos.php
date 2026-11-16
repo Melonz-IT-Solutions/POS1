@@ -25,6 +25,7 @@ Route::middleware(['auth', 'verified'])->prefix('pos')->name('pos.')->group(func
     // ── Product Lookup (AJAX) ────────────────────────────────────────
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('search', [ProductLookupController::class, 'search'])->name('search');
+        Route::get('browse', [ProductLookupController::class, 'browse'])->name('browse');
         Route::get('barcode', [ProductLookupController::class, 'barcode'])->name('barcode');
     });
 
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'verified'])->prefix('pos')->name('pos.')->group(func
     // ── Shift Management ─────────────────────────────────────────────
     Route::prefix('shifts')->name('shifts.')->group(function () {
         Route::get('current', [ShiftController::class, 'current'])->name('current');
+        Route::get('summary', [ShiftController::class, 'summary'])->name('summary');
         Route::post('open', [ShiftController::class, 'open'])->name('open');
         Route::post('close', [ShiftController::class, 'close'])->name('close');
         Route::post('cash-in', [ShiftController::class, 'cashIn'])->name('cash-in');
@@ -43,7 +45,9 @@ Route::middleware(['auth', 'verified'])->prefix('pos')->name('pos.')->group(func
     // ── Sales ────────────────────────────────────────────────────────
     Route::prefix('sales')->name('sales.')->group(function () {
         Route::get('/', [SaleController::class, 'index'])->name('index');
+        Route::get('export', [SaleController::class, 'export'])->name('export');
         Route::get('held', [SaleController::class, 'heldList'])->name('held');
+        Route::get('{sale}/receipt', [SaleController::class, 'receipt'])->name('receipt');
         Route::get('{sale}', [SaleController::class, 'show'])->name('show');
         Route::post('/', [SaleController::class, 'store'])->name('store');
         Route::post('hold', [SaleController::class, 'hold'])->name('hold');
@@ -51,5 +55,6 @@ Route::middleware(['auth', 'verified'])->prefix('pos')->name('pos.')->group(func
         Route::delete('{sale}/held', [SaleController::class, 'cancelHeld'])->name('cancel-held');
         Route::post('{sale}/void', [SaleController::class, 'void'])->name('void');
         Route::post('{sale}/refund', [SaleController::class, 'refund'])->name('refund');
+        Route::post('{sale}/email-receipt', [SaleController::class, 'emailReceipt'])->name('email-receipt');
     });
 });

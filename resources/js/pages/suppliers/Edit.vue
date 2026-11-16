@@ -52,7 +52,7 @@ function toggleProduct(id: number) {
         { title: 'Suppliers', href: SupplierController.index.url() },
         { title: supplier.company_name, href: SupplierController.edit.url({ supplier: supplier.id }) },
     ]">
-        <div class="mx-auto max-w-2xl p-6 space-y-6">
+        <div class="max-w-2xl p-6 space-y-6">
             <div>
                 <h1 class="text-2xl font-bold">Edit Supplier</h1>
                 <p class="text-muted-foreground text-sm">{{ supplier.company_name }}</p>

@@ -51,7 +51,7 @@ function toggleProduct(id: number) {
         { title: 'Suppliers', href: SupplierController.index.url() },
         { title: 'New Supplier', href: SupplierController.create.url() },
     ]">
-        <div class="mx-auto max-w-2xl p-6 space-y-6">
+        <div class="max-w-2xl p-6 space-y-6">
             <div>
                 <h1 class="text-2xl font-bold">New Supplier</h1>
                 <p class="text-muted-foreground text-sm">Add a product supplier</p>

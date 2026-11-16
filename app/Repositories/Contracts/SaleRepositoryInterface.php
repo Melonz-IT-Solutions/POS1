@@ -15,5 +15,7 @@ interface SaleRepositoryInterface
 
     public function paginate(array $filters = [], int $perPage = 20): LengthAwarePaginator;
 
+    public function export(array $filters = []): Collection;
+
     public function todaysSummary(): array;
 }

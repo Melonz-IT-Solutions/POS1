@@ -12,6 +12,11 @@ class CategoryPolicy
         return $user->can('manage categories');
     }
 
+    public function view(User $user, Category $category): bool
+    {
+        return $user->can('manage categories');
+    }
+
     public function create(User $user): bool
     {
         return $user->can('manage categories');

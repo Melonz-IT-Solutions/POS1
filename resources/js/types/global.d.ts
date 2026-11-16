@@ -20,7 +20,14 @@ declare module '@inertiajs/core' {
             name: string;
             auth: Auth;
             sidebarOpen: boolean;
+            alerts: { low_stock: number; draft_pos: number };
             [key: string]: unknown;
+        };
+        flashDataType: {
+            toast?: {
+                type: 'success' | 'info' | 'warning' | 'error';
+                message: string;
+            } | null;
         };
     }
 }

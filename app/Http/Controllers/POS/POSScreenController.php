@@ -23,8 +23,9 @@ class POSScreenController extends Controller
             'vat_inclusive'    => Setting::get('vat_inclusive', true),
             'vat_rate'         => Setting::get('vat_rate', 12),
             'currency_symbol'  => Setting::get('currency_symbol', '₱'),
-            'loyalty_enabled'  => Setting::get('loyalty_enabled', false),
-            'max_cashier_disc' => Setting::get('max_cashier_discount_pct', 500), // 5% in basis points
+            'loyalty_enabled'      => Setting::get('loyalty_enabled', false),
+            'loyalty_redeem_rate'  => (int) Setting::get('loyalty_redeem_rate', 100), // centavos per point
+            'max_cashier_disc'     => Setting::get('max_cashier_discount_pct', 500), // 5% in basis points
         ];
 
         $categories     = Category::active()->roots()->with('children')->orderBy('sort_order')->get();

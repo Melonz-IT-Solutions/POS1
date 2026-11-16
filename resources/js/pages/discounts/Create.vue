@@ -74,7 +74,7 @@ function toggleId(list: number[], id: number) {
         { title: 'Discounts', href: DiscountController.index.url() },
         { title: 'New Discount', href: DiscountController.create.url() },
     ]">
-        <div class="mx-auto max-w-2xl p-6 space-y-6">
+        <div class="max-w-2xl p-6 space-y-6">
             <div>
                 <h1 class="text-2xl font-bold">New Discount</h1>
                 <p class="text-muted-foreground text-sm">Create a discount rule</p>

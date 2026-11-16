@@ -12,6 +12,11 @@ class SupplierPolicy
         return $user->can('view suppliers');
     }
 
+    public function view(User $user, Supplier $supplier): bool
+    {
+        return $user->can('view suppliers');
+    }
+
     public function create(User $user): bool
     {
         return $user->can('create suppliers');

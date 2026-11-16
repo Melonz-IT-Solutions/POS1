@@ -14,6 +14,8 @@ export const useCartStore = defineStore('cart', () => {
     const notes     = ref('');
     const seniorPwd = ref<SeniorPwdInfo>({ sc_name: '', sc_id_no: '', pwd_name: '', pwd_id_no: '' });
     const isSeniorPwd = ref(false);
+    const forceVatExempt = ref(false);
+    const loyaltyRedemption = ref({ points: 0, centavos: 0 });
 
     // ── Helpers ──────────────────────────────────────────────────────────
     const { calculate: calcVat } = useTax();
@@ -25,7 +27,10 @@ export const useCartStore = defineStore('cart', () => {
             ? calcDiscount(item.discount_type, item.discount_value, gross)
             : 0;
         const lineTotal = gross - discAmt;
-        const { vatAmount } = calcVat(lineTotal, item.vat_type);
+        const effectiveVatType = forceVatExempt.value && item.vat_type === 'vatable'
+            ? 'vat_exempt'
+            : item.vat_type;
+        const { vatAmount } = calcVat(lineTotal, effectiveVatType);
 
         return { ...item, discount_amount: discAmt, line_total: lineTotal, vat_amount: vatAmount };
     }
@@ -44,12 +49,15 @@ export const useCartStore = defineStore('cart', () => {
 
         for (const item of computedItems.value) {
             subtotal += item.line_total;
-            const { vatBase, vatAmount: vat } = calcVat(item.line_total, item.vat_type);
+            const effectiveType = forceVatExempt.value && item.vat_type === 'vatable'
+                ? 'vat_exempt'
+                : item.vat_type;
+            const { vatBase, vatAmount: vat } = calcVat(item.line_total, effectiveType);
 
-            if (item.vat_type === 'vatable') {
+            if (effectiveType === 'vatable') {
                 vatableSales += vatBase;
                 vatAmount    += vat;
-            } else if (item.vat_type === 'vat_exempt') {
+            } else if (effectiveType === 'vat_exempt') {
                 vatExemptSales += item.line_total;
             } else {
                 zeroRatedSales += item.line_total;
@@ -79,7 +87,7 @@ export const useCartStore = defineStore('cart', () => {
     const isEmpty = computed(() => items.value.length === 0);
 
     // ── Actions ──────────────────────────────────────────────────────────
-    function addItem(product: Product, qty = 1) {
+    function addItem(product: Pick<Product, 'id' | 'name' | 'sku' | 'barcode' | 'selling_price' | 'cost_price' | 'vat_type' | 'image_path'>, qty = 1) {
         const existing = items.value.find((i) => i.product_id === product.id);
         if (existing) {
             existing.quantity += qty;
@@ -91,6 +99,7 @@ export const useCartStore = defineStore('cart', () => {
             product_name:    product.name,
             product_sku:     product.sku,
             product_barcode: product.barcode,
+            product_image:   product.image_path ?? null,
             unit_price:      product.selling_price,
             cost_price:      product.cost_price,
             vat_type:        product.vat_type,
@@ -140,8 +149,19 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     function setSeniorPwd(info: SeniorPwdInfo) {
-        seniorPwd.value  = info;
+        seniorPwd.value   = info;
         isSeniorPwd.value = !!(info.sc_id_no || info.pwd_id_no);
+    }
+
+    function setVatExempt(val: boolean) {
+        forceVatExempt.value = val;
+    }
+
+    function setLoyaltyRedemption(points: number, centavosPerPoint: number) {
+        loyaltyRedemption.value = {
+            points,
+            centavos: points * centavosPerPoint,
+        };
     }
 
     function clearCart() {
@@ -149,7 +169,9 @@ export const useCartStore = defineStore('cart', () => {
         customer.value  = null;
         discount.value  = { type: null, value: 0 };
         notes.value     = '';
-        isSeniorPwd.value = false;
+        isSeniorPwd.value       = false;
+        forceVatExempt.value    = false;
+        loyaltyRedemption.value = { points: 0, centavos: 0 };
         seniorPwd.value = { sc_name: '', sc_id_no: '', pwd_name: '', pwd_id_no: '' };
     }
 
@@ -159,9 +181,10 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     return {
-        items, customer, discount, notes, seniorPwd, isSeniorPwd,
+        items, customer, discount, notes, seniorPwd, isSeniorPwd, forceVatExempt, loyaltyRedemption,
         computedItems, summary, isEmpty,
         addItem, removeItem, updateQuantity, setItemDiscount,
-        setDiscount, setCustomer, setSeniorPwd, clearCart, restoreFromHeld,
+        setDiscount, setCustomer, setSeniorPwd, setVatExempt, setLoyaltyRedemption,
+        clearCart, restoreFromHeld,
     };
 });

@@ -73,6 +73,17 @@ class SaleService
 
             $totalAmount    = $subtotal - $discountAmount;
 
+            // ─── Loyalty points redemption ───────────────────────────────
+            $redeemAmount = 0;
+            if ($data->redeem_points > 0 && $customer) {
+                $redeemRate   = (int) Setting::get('loyalty_redeem_rate', 100); // centavos per point
+                $redeemAmount = min(
+                    $data->redeem_points * $redeemRate,
+                    $totalAmount
+                );
+                $totalAmount  = $totalAmount - $redeemAmount;
+            }
+
             // ─── Validate payment ────────────────────────────────────────
             $totalPaid = array_sum(array_map(fn ($p) => $p->amount, $data->payments));
             if ($totalPaid < $totalAmount) {
@@ -155,6 +166,9 @@ class SaleService
 
             // ─── Loyalty points ───────────────────────────────────────────
             if ($customer) {
+                if ($data->redeem_points > 0 && $redeemAmount > 0) {
+                    $this->redeemLoyaltyPoints($customer, $sale, $data->redeem_points);
+                }
                 $this->awardLoyaltyPoints($customer, $sale);
             }
 
@@ -371,7 +385,13 @@ class SaleService
             $vatAmount += $vatCalc['vat_amount'];
         }
 
-        return compact('subtotal', 'vatableSales', 'vatExemptSales', 'zeroRatedSales', 'vatAmount');
+        return [
+            'subtotal'         => $subtotal,
+            'vatable_sales'    => $vatableSales,
+            'vat_exempt_sales' => $vatExemptSales,
+            'zero_rated_sales' => $zeroRatedSales,
+            'vat_amount'       => $vatAmount,
+        ];
     }
 
     private function generateReceiptNumber(string $prefix = ''): string
@@ -391,6 +411,22 @@ class SaleService
 
             return sprintf('%s-%s-%05d', $finalPrefix, $date, $next);
         });
+    }
+
+    private function redeemLoyaltyPoints(Customer $customer, Sale $sale, int $points): void
+    {
+        $points     = min($points, $customer->loyalty_points);
+        $newBalance = max(0, $customer->loyalty_points - $points);
+
+        $customer->update(['loyalty_points' => $newBalance]);
+
+        $customer->loyaltyTransactions()->create([
+            'sale_id'         => $sale->id,
+            'type'            => 'redeemed',
+            'points'          => -$points,
+            'running_balance' => $newBalance,
+            'description'     => "Redeemed on OR# {$sale->receipt_number}",
+        ]);
     }
 
     private function awardLoyaltyPoints(Customer $customer, Sale $sale): void

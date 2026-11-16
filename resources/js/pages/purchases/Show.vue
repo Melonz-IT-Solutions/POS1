@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { router } from '@inertiajs/vue3';
-import { CheckCircle2, ClipboardList, PackageCheck, Pencil, XCircle } from '@lucide/vue';
+import { CheckCircle2, ClipboardList, PackageCheck, Pencil, Printer, XCircle } from '@lucide/vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -65,6 +65,18 @@ function remainingQty(item: { quantity_ordered: number; quantity_received: numbe
                 </div>
 
                 <div class="flex gap-2">
+                    <!-- Print button always visible for non-cancelled POs -->
+                    <Button
+                        v-if="order.status !== 'cancelled'"
+                        variant="outline"
+                        size="sm"
+                        as-child
+                    >
+                        <a :href="PurchaseOrderController.print.url({ purchase: order.id })" target="_blank">
+                            <Printer class="mr-2 h-4 w-4" />
+                            Print PO
+                        </a>
+                    </Button>
                     <template v-if="order.status === 'draft'">
                         <Button variant="outline" size="sm" as-child>
                             <a :href="PurchaseOrderController.edit.url({ purchase: order.id })">

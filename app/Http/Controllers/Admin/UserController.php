@@ -83,6 +83,42 @@ class UserController extends Controller
             ->with('success', "User \"{$user->name}\" created.");
     }
 
+    public function show(User $user): Response
+    {
+        $this->authorize('view', $user);
+
+        $user->load('roles');
+        $allPermissions = $user->getAllPermissions()->pluck('name')->sort()->values();
+
+        $stats = [
+            'total_sales'   => $user->sales()->where('status', 'completed')->count(),
+            'total_revenue' => (int) $user->sales()->where('status', 'completed')->sum('total_amount'),
+            'total_shifts'  => $user->shifts()->count(),
+            'void_count'    => $user->sales()->where('status', 'void')->count(),
+        ];
+
+        $recentSales = $user->sales()
+            ->whereIn('status', ['completed', 'void'])
+            ->with('customer:id,name')
+            ->latest()
+            ->limit(8)
+            ->get(['id', 'receipt_number', 'total_amount', 'customer_id', 'created_at', 'status']);
+
+        $recentActivity = \App\Models\AuditLog::where('user_id', $user->id)
+            ->latest()
+            ->limit(10)
+            ->get(['id', 'action', 'auditable_type', 'created_at']);
+
+        return Inertia::render('users/Show', [
+            'user'           => $user,
+            'permissions'    => $allPermissions,
+            'stats'          => $stats,
+            'recentSales'    => $recentSales,
+            'recentActivity' => $recentActivity,
+            'canEdit'        => auth()->user()->can('update', $user),
+        ]);
+    }
+
     public function edit(User $user): Response
     {
         $this->authorize('update', $user);

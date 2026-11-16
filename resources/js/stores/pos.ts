@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import type { PaymentMethod, Sale, Shift } from '@/types/models';
 
-type ModalType = 'payment' | 'hold' | 'discount' | 'supervisor' | 'refund' | 'senior-pwd' | null;
+type ModalType = 'payment' | 'hold' | 'discount' | 'supervisor' | 'refund' | 'senior-pwd' | 'close-shift' | null;
 
 export const usePosStore = defineStore('pos', () => {
     // ── Shift ────────────────────────────────────────────────────────────
