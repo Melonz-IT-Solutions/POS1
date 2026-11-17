@@ -16,6 +16,13 @@ import SupervisorAuthModal from '@/components/pos/SupervisorAuthModal.vue';
 import CloseShiftModal from '@/components/pos/CloseShiftModal.vue';
 import SeniorPwdModal from '@/components/pos/SeniorPwdModal.vue';
 
+import {
+    ShoppingCart,
+    Search,
+    Grid3x3,
+    PhilippinePeso
+} from '@lucide/vue';
+
 import type { Category, PaymentMethod, Shift } from '@/types/models';
 import type { POSSettings } from '@/types/pos';
 
@@ -135,15 +142,15 @@ const panelMode = ref<'search' | 'browse'>('search');
             <div class="bg-background w-full max-w-sm rounded-xl border p-6 shadow-2xl">
                 <div class="mb-4 text-center">
                     <div class="bg-primary/10 text-primary mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full text-xl">
-                        🏪
+                        <PhilippinePeso class="h-6 w-6" />
                     </div>
                     <h2 class="text-lg font-semibold">Open Shift</h2>
                     <p class="text-muted-foreground mt-1 text-sm">Enter your opening cash float to begin.</p>
                 </div>
 
-                <label class="text-muted-foreground mb-1 block text-xs font-medium uppercase tracking-wider">
+                <!-- <label class="text-muted-foreground mb-1 block text-xs font-medium uppercase tracking-wider">
                     Opening Float (₱)
-                </label>
+                </label> -->
                 <input
                     v-model.number="openingFloat"
                     class="border-input bg-background mb-4 w-full rounded-lg border px-4 py-3 text-lg font-semibold focus:outline-none focus:ring-2 focus:ring-primary"
@@ -195,22 +202,24 @@ const panelMode = ref<'search' | 'browse'>('search');
                 <!-- Mode toggle -->
                 <div class="flex border-b shrink-0">
                     <button
-                        class="flex-1 py-2 text-xs font-medium transition-colors"
+                        class="flex flex-1 items-center justify-center gap-1.5 py-2 text-lg font-medium transition-colors"
                         :class="panelMode === 'search'
                             ? 'border-b-2 border-primary text-primary bg-primary/5'
                             : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                         @click="panelMode = 'search'"
                     >
-                        🔍 Search
+                        <Search class="h-4 w-4" />
+                        Search
                     </button>
                     <button
-                        class="flex-1 py-2 text-xs font-medium transition-colors"
+                        class="flex flex-1 items-center justify-center gap-1.5 py-2 text-lg font-medium transition-colors"
                         :class="panelMode === 'browse'
                             ? 'border-b-2 border-primary text-primary bg-primary/5'
                             : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                         @click="panelMode = 'browse'"
                     >
-                        📦 Browse
+                        <Grid3x3 class="h-4 w-4" />
+                        Browse
                     </button>
                 </div>
 
@@ -227,7 +236,7 @@ const panelMode = ref<'search' | 'browse'>('search');
                 <!-- Search mode: cart items -->
                 <div v-else class="flex-1 overflow-y-auto">
                     <div v-if="cart.isEmpty" class="flex h-full flex-col items-center justify-center text-center p-8">
-                        <div class="text-muted-foreground/30 text-6xl mb-4">🛒</div>
+                        <ShoppingCart class="text-muted-foreground/30 mb-4 h-16 w-16" />
                         <div class="text-muted-foreground font-medium">Cart is empty</div>
                         <div class="text-muted-foreground mt-1 text-sm">Search or scan a product to add it</div>
                         <div class="text-muted-foreground mt-4 text-xs">
@@ -277,7 +286,7 @@ const panelMode = ref<'search' | 'browse'>('search');
                     <div v-else class="relative">
                         <input
                             v-model="customerQuery"
-                            class="border-input bg-background w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                            class="border-input bg-background w-full rounded-lg border px-3 py-2 text-lg focus:outline-none focus:ring-1 focus:ring-primary"
                             placeholder="Search customer or walk-in..."
                             @input="searchCustomers(customerQuery)"
                             @blur="() => setTimeout(() => showCustomerDd = false, 200)" />

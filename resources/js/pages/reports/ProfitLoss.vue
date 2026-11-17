@@ -126,7 +126,7 @@ function exportCsv() {
         { title: 'Reports', href: ReportController.sales.url() },
         { title: 'Profit & Loss', href: ReportController.profitLoss.url() },
     ]">
-        <div class="mx-auto max-w-5xl p-6 space-y-6">
+        <div class="max-w-5xl p-6 space-y-6">
 
             <!-- Header -->
             <div class="flex flex-wrap items-center justify-between gap-4">

@@ -23,7 +23,7 @@ defineProps<{
     collapsible?: boolean;
 }>();
 
-const open = ref(true);
+const open = ref(false);
 const { isCurrentUrl } = useCurrentUrl();
 </script>
 
@@ -33,7 +33,7 @@ const { isCurrentUrl } = useCurrentUrl();
         <SidebarGroup class="px-2 py-0">
             <SidebarGroupLabel as-child>
                 <CollapsibleTrigger class="flex w-full items-center hover:text-sidebar-accent-foreground">
-                    {{ label ?? 'Platform' }}
+                    <p class="text-sm">{{ label ?? '' }}</p>
                     <ChevronDown class="ml-auto h-4 w-4 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                 </CollapsibleTrigger>
             </SidebarGroupLabel>
@@ -45,7 +45,7 @@ const { isCurrentUrl } = useCurrentUrl();
                             :is-active="isCurrentUrl(item.href)"
                             :tooltip="item.title"
                         >
-                            <Link :href="item.href" class="ml-4">
+                            <Link :href="item.href" class="pl-6">
                                 <component :is="item.icon" />
                                 <span>{{ item.title }}</span>
                                 <span

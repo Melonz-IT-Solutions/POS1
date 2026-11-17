@@ -98,7 +98,7 @@ function onEnter() {
                 ref="inputRef"
                 v-model="query"
                 v-focus
-                class="flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground"
+                class="flex-1 bg-transparent text-base outline-none placeholder:text-muted-foreground text-lg"
                 placeholder="Search product, scan barcode or enter SKU... (F2)"
                 autocomplete="off"
                 @keydown.enter.prevent="onEnter"

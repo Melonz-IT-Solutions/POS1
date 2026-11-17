@@ -104,8 +104,8 @@ class ReportController extends Controller
                     $cost          = (int) $row->total_cost;
                     $profit        = $data['revenue'] - $cost;
                     $data['cost']  = $cost;
-                    $data['profit']= $profit;
-                    $data['margin']= $data['revenue'] > 0
+                    $data['profit'] = $profit;
+                    $data['margin'] = $data['revenue'] > 0
                         ? round($profit / $data['revenue'] * 100, 1)
                         : 0;
                 }
@@ -427,7 +427,7 @@ class ReportController extends Controller
                 'loyalty_points' => (int) ($row->customer?->loyalty_points ?? 0),
                 'transactions'   => (int) $row->transactions,
                 'total_spent'    => (int) $row->total_spent,
-                'avg_transaction'=> (int) $row->avg_transaction,
+                'avg_transaction' => (int) $row->avg_transaction,
                 'last_visit'     => $row->last_visit,
             ]);
 
@@ -613,7 +613,9 @@ class ReportController extends Controller
             ->whereBetween('created_at', [$from, $to])
             ->selectRaw('DATE(created_at) as day, SUM(total_amount) as revenue, SUM(discount_amount) as discounts')
             ->groupBy('day')
-            ->pluck(null, 'day')
+            // ->pluck(null, 'day')
+            ->get()
+            ->keyBy('day')
             ->map(fn ($r) => ['revenue' => (int) $r->revenue, 'discounts' => (int) $r->discounts]);
 
         $dailyRefunds = Sale::where('status', 'refunded')
@@ -656,7 +658,7 @@ class ReportController extends Controller
                 'expenses'     => $exp,
                 'net_income'   => $gp - $exp,
             ];
-            $cursor->addDay();
+            $cursor = $cursor->addDay();
         }
 
         return Inertia::render('reports/ProfitLoss', [
@@ -695,7 +697,7 @@ class ReportController extends Controller
             'last_month' => [now()->subMonth()->startOfMonth(),     now()->subMonth()->endOfMonth()],
             'custom'     => [
                 Carbon::parse($request->input('date_from', now()->toDateString()))->startOfDay(),
-                Carbon::parse($request->input('date_to',   now()->toDateString()))->endOfDay(),
+                Carbon::parse($request->input('date_to', now()->toDateString()))->endOfDay(),
             ],
             default      => [now()->startOfDay(), now()->endOfDay()], // today
         };

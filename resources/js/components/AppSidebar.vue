@@ -137,7 +137,7 @@ const adminNavItems: NavItem[] = [
             </SidebarMenu>
         </SidebarHeader>
 
-        <SidebarContent>
+        <SidebarContent class="overflow-x-hidden">
             <NavMain :items="mainNavItems" label="Overview" />
             <SidebarSeparator />
             <NavMain :items="posNavItems" label="Sales" />
