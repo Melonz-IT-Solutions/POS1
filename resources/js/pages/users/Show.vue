@@ -17,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCurrency } from '@/composables/useCurrency';
 import * as UserController from '@/actions/App/Http/Controllers/Admin/UserController';
-import * as SaleController from '@/actions/App/Http/Controllers/Pos/SaleController';
+import * as SaleController from '@/actions/App/Http/Controllers/POS/SaleController';
 import type { Role, User } from '@/types/models';
 
 interface UserDetail extends User {
