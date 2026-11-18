@@ -1,19 +1,6 @@
-# ── Stage 1: Build frontend assets ───────────────────────────────────────────
-FROM node:22-alpine AS frontend
-
-WORKDIR /app
-
-COPY package.json package-lock.json ./
-RUN npm ci
-
-COPY . .
-
-RUN npm run build
-
-# ── Stage 2: PHP/Apache production image ─────────────────────────────────────
 FROM php:8.4-apache
 
-# Install system dependencies
+# Install system dependencies + Node.js 22
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -24,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     zip \
     unzip \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y nodejs \
     && docker-php-ext-install \
     pdo_pgsql \
     pgsql \
@@ -55,8 +44,12 @@ RUN composer install --no-interaction --no-scripts --no-autoloader --prefer-dist
 # Copy application
 COPY . .
 
-# Copy compiled frontend assets from the node stage
-COPY --from=frontend /app/public/build ./public/build
+# Finish composer install (needed before npm build — wayfinder calls artisan)
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Build frontend assets (wayfinder plugin calls php artisan during build)
+COPY package.json package-lock.json ./
+RUN npm ci && npm run build && rm -rf node_modules
 
 # Use clean vhost config: document root → public/, AllowOverride All for .htaccess
 RUN printf '<VirtualHost *:80>\n\
@@ -69,9 +62,6 @@ RUN printf '<VirtualHost *:80>\n\
     ErrorLog ${APACHE_LOG_DIR}/error.log\n\
     CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
 </VirtualHost>\n' > /etc/apache2/sites-available/000-default.conf
-
-# Finish composer install
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
