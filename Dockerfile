@@ -49,7 +49,11 @@ RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Build frontend assets (wayfinder plugin calls php artisan during build)
 COPY package.json package-lock.json ./
-RUN npm ci && npm run build && rm -rf node_modules
+RUN cp .env.example .env \
+    && php artisan key:generate \
+    && npm ci \
+    && npm run build \
+    && rm -rf node_modules .env
 
 # Use clean vhost config: document root → public/, AllowOverride All for .htaccess
 RUN printf '<VirtualHost *:80>\n\
