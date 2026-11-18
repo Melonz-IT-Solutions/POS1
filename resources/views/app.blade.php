@@ -41,7 +41,7 @@
         <meta property="og:url" content="{{ url()->current() }}">
         <meta property="og:title" content="POS1 — No.1 POS Software for Philippine Retail">
         <meta property="og:description" content="Ring up sales in seconds, stay BIR-compliant, and never run out of best-sellers. The POS built for Philippine retail.">
-        <meta property="og:image" content="{{ asset('images/pos_cover.png') }}">
+        <meta property="og:image" content="{{ asset('images/pos_cover_dark.png') }}">
         <meta property="og:image:width" content="1200">
         <meta property="og:image:height" content="630">
         <meta property="og:locale" content="en_PH">
