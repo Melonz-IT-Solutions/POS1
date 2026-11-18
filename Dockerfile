@@ -6,10 +6,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy everything needed for the Vite build
-COPY vite.config.ts tsconfig.json ./
-COPY resources/ resources/
-COPY public/ public/
+COPY . .
 
 RUN npm run build
 
