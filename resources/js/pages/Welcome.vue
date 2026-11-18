@@ -364,7 +364,13 @@ const plans: Plan[] = [
 </script>
 
 <template>
-    <Head title="POS1 — No.1 POS Software" />
+    <Head title="POS1 — No.1 POS Software for Philippine Retail">
+        <meta name="description" content="Ring up sales in seconds, never run out of best-sellers, and stay BIR-compliant — all from one simple POS system built for Philippine retail.">
+        <meta property="og:title" content="POS1 — No.1 POS Software for Philippine Retail">
+        <meta property="og:description" content="Ring up sales in seconds, never run out of best-sellers, and stay BIR-compliant — all from one simple POS system built for Philippine retail.">
+        <meta name="twitter:title" content="POS1 — No.1 POS Software for Philippine Retail">
+        <meta name="twitter:description" content="Ring up sales in seconds, never run out of best-sellers, and stay BIR-compliant — all from one simple POS system built for Philippine retail.">
+    </Head>
 
     <div class="bg-background text-foreground min-h-screen font-sans">
         <!-- Nav -->
@@ -492,7 +498,7 @@ const plans: Plan[] = [
                     <span class="h-3 w-3 rounded-full bg-amber-400" />
                     <span class="h-3 w-3 rounded-full bg-emerald-400" />
                     <div class="text-muted-foreground mx-auto w-full max-w-sm rounded-md bg-card px-3 py-1 text-center text-xs">
-                        https://pos1.ph/{{ active === 'pos' ? 'pos' : active === 'dashboard' ? 'dashboard' : 'admin/reports/sales' }}
+                        mystore.pos1.ph/{{ active === 'pos' ? 'pos' : active === 'dashboard' ? 'dashboard' : 'admin/reports/sales' }}
                     </div>
                 </div>
 
