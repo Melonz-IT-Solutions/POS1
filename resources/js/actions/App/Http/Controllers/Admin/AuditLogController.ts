@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\AuditLogController::index
 * @see app/Http/Controllers/Admin/AuditLogController.php:14
@@ -44,11 +44,48 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\AuditLogController::index
+* @see app/Http/Controllers/Admin/AuditLogController.php:14
+* @route '/admin/audit'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\AuditLogController::index
+* @see app/Http/Controllers/Admin/AuditLogController.php:14
+* @route '/admin/audit'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\AuditLogController::index
+* @see app/Http/Controllers/Admin/AuditLogController.php:14
+* @route '/admin/audit'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
+
+/**
 * @see \App\Http\Controllers\Admin\AuditLogController::show
 * @see app/Http/Controllers/Admin/AuditLogController.php:55
 * @route '/admin/audit/{auditLog}'
 */
-export const show = (args: { auditLog: number | { id: number } } | [auditLog: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { auditLog: string | number | { id: string | number } } | [auditLog: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -63,7 +100,7 @@ show.definition = {
 * @see app/Http/Controllers/Admin/AuditLogController.php:55
 * @route '/admin/audit/{auditLog}'
 */
-show.url = (args: { auditLog: number | { id: number } } | [auditLog: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+show.url = (args: { auditLog: string | number | { id: string | number } } | [auditLog: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { auditLog: args }
     }
@@ -96,7 +133,7 @@ show.url = (args: { auditLog: number | { id: number } } | [auditLog: number | { 
 * @see app/Http/Controllers/Admin/AuditLogController.php:55
 * @route '/admin/audit/{auditLog}'
 */
-show.get = (args: { auditLog: number | { id: number } } | [auditLog: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { auditLog: string | number | { id: string | number } } | [auditLog: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -106,10 +143,47 @@ show.get = (args: { auditLog: number | { id: number } } | [auditLog: number | { 
 * @see app/Http/Controllers/Admin/AuditLogController.php:55
 * @route '/admin/audit/{auditLog}'
 */
-show.head = (args: { auditLog: number | { id: number } } | [auditLog: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { auditLog: string | number | { id: string | number } } | [auditLog: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\AuditLogController::show
+* @see app/Http/Controllers/Admin/AuditLogController.php:55
+* @route '/admin/audit/{auditLog}'
+*/
+const showForm = (args: { auditLog: string | number | { id: string | number } } | [auditLog: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\AuditLogController::show
+* @see app/Http/Controllers/Admin/AuditLogController.php:55
+* @route '/admin/audit/{auditLog}'
+*/
+showForm.get = (args: { auditLog: string | number | { id: string | number } } | [auditLog: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\AuditLogController::show
+* @see app/Http/Controllers/Admin/AuditLogController.php:55
+* @route '/admin/audit/{auditLog}'
+*/
+showForm.head = (args: { auditLog: string | number | { id: string | number } } | [auditLog: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+show.form = showForm
 
 const AuditLogController = { index, show }
 

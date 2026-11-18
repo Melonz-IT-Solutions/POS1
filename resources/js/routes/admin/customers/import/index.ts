@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\CustomerImportController::store
 * @see app/Http/Controllers/Admin/CustomerImportController.php:23
@@ -32,6 +32,28 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\CustomerImportController::store
+* @see app/Http/Controllers/Admin/CustomerImportController.php:23
+* @route '/admin/customers/import'
+*/
+const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\CustomerImportController::store
+* @see app/Http/Controllers/Admin/CustomerImportController.php:23
+* @route '/admin/customers/import'
+*/
+storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+store.form = storeForm
 
 const importMethod = {
     store: Object.assign(store, store),

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\InventoryController::index
 * @see app/Http/Controllers/Admin/InventoryController.php:21
@@ -42,6 +42,43 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::index
+* @see app/Http/Controllers/Admin/InventoryController.php:21
+* @route '/admin/inventory'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::index
+* @see app/Http/Controllers/Admin/InventoryController.php:21
+* @route '/admin/inventory'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::index
+* @see app/Http/Controllers/Admin/InventoryController.php:21
+* @route '/admin/inventory'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\Admin\InventoryController::reorder
@@ -88,6 +125,43 @@ reorder.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\InventoryController::reorder
+* @see app/Http/Controllers/Admin/InventoryController.php:89
+* @route '/admin/inventory/reorder'
+*/
+const reorderForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: reorder.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::reorder
+* @see app/Http/Controllers/Admin/InventoryController.php:89
+* @route '/admin/inventory/reorder'
+*/
+reorderForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: reorder.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::reorder
+* @see app/Http/Controllers/Admin/InventoryController.php:89
+* @route '/admin/inventory/reorder'
+*/
+reorderForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: reorder.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+reorder.form = reorderForm
+
+/**
 * @see \App\Http\Controllers\Admin\InventoryController::valuation
 * @see app/Http/Controllers/Admin/InventoryController.php:114
 * @route '/admin/inventory/valuation'
@@ -130,6 +204,43 @@ valuation.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: valuation.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::valuation
+* @see app/Http/Controllers/Admin/InventoryController.php:114
+* @route '/admin/inventory/valuation'
+*/
+const valuationForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: valuation.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::valuation
+* @see app/Http/Controllers/Admin/InventoryController.php:114
+* @route '/admin/inventory/valuation'
+*/
+valuationForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: valuation.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::valuation
+* @see app/Http/Controllers/Admin/InventoryController.php:114
+* @route '/admin/inventory/valuation'
+*/
+valuationForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: valuation.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+valuation.form = valuationForm
 
 /**
 * @see \App\Http\Controllers\Admin\InventoryController::allMovements
@@ -176,6 +287,43 @@ allMovements.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\InventoryController::allMovements
+* @see app/Http/Controllers/Admin/InventoryController.php:290
+* @route '/admin/inventory/movements/all'
+*/
+const allMovementsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: allMovements.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::allMovements
+* @see app/Http/Controllers/Admin/InventoryController.php:290
+* @route '/admin/inventory/movements/all'
+*/
+allMovementsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: allMovements.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::allMovements
+* @see app/Http/Controllers/Admin/InventoryController.php:290
+* @route '/admin/inventory/movements/all'
+*/
+allMovementsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: allMovements.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+allMovements.form = allMovementsForm
+
+/**
 * @see \App\Http\Controllers\Admin\InventoryController::exportMethod
 * @see app/Http/Controllers/Admin/InventoryController.php:187
 * @route '/admin/inventory/export'
@@ -218,6 +366,43 @@ exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: exportMethod.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::exportMethod
+* @see app/Http/Controllers/Admin/InventoryController.php:187
+* @route '/admin/inventory/export'
+*/
+const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::exportMethod
+* @see app/Http/Controllers/Admin/InventoryController.php:187
+* @route '/admin/inventory/export'
+*/
+exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::exportMethod
+* @see app/Http/Controllers/Admin/InventoryController.php:187
+* @route '/admin/inventory/export'
+*/
+exportMethodForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+exportMethod.form = exportMethodForm
 
 /**
 * @see \App\Http\Controllers\Admin\InventoryController::physicalCount
@@ -264,6 +449,43 @@ physicalCount.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => (
 })
 
 /**
+* @see \App\Http\Controllers\Admin\InventoryController::physicalCount
+* @see app/Http/Controllers/Admin/InventoryController.php:238
+* @route '/admin/inventory/physical-count'
+*/
+const physicalCountForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: physicalCount.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::physicalCount
+* @see app/Http/Controllers/Admin/InventoryController.php:238
+* @route '/admin/inventory/physical-count'
+*/
+physicalCountForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: physicalCount.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::physicalCount
+* @see app/Http/Controllers/Admin/InventoryController.php:238
+* @route '/admin/inventory/physical-count'
+*/
+physicalCountForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: physicalCount.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+physicalCount.form = physicalCountForm
+
+/**
 * @see \App\Http\Controllers\Admin\InventoryController::applyPhysicalCount
 * @see app/Http/Controllers/Admin/InventoryController.php:252
 * @route '/admin/inventory/physical-count'
@@ -298,11 +520,33 @@ applyPhysicalCount.post = (options?: RouteQueryOptions): RouteDefinition<'post'>
 })
 
 /**
+* @see \App\Http\Controllers\Admin\InventoryController::applyPhysicalCount
+* @see app/Http/Controllers/Admin/InventoryController.php:252
+* @route '/admin/inventory/physical-count'
+*/
+const applyPhysicalCountForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: applyPhysicalCount.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::applyPhysicalCount
+* @see app/Http/Controllers/Admin/InventoryController.php:252
+* @route '/admin/inventory/physical-count'
+*/
+applyPhysicalCountForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: applyPhysicalCount.url(options),
+    method: 'post',
+})
+
+applyPhysicalCount.form = applyPhysicalCountForm
+
+/**
 * @see \App\Http\Controllers\Admin\InventoryController::adjust
 * @see app/Http/Controllers/Admin/InventoryController.php:61
 * @route '/admin/inventory/{product}/adjust'
 */
-export const adjust = (args: { product: number | { id: number } } | [product: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const adjust = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: adjust.url(args, options),
     method: 'post',
 })
@@ -317,7 +561,7 @@ adjust.definition = {
 * @see app/Http/Controllers/Admin/InventoryController.php:61
 * @route '/admin/inventory/{product}/adjust'
 */
-adjust.url = (args: { product: number | { id: number } } | [product: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+adjust.url = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { product: args }
     }
@@ -350,17 +594,39 @@ adjust.url = (args: { product: number | { id: number } } | [product: number | { 
 * @see app/Http/Controllers/Admin/InventoryController.php:61
 * @route '/admin/inventory/{product}/adjust'
 */
-adjust.post = (args: { product: number | { id: number } } | [product: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+adjust.post = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: adjust.url(args, options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::adjust
+* @see app/Http/Controllers/Admin/InventoryController.php:61
+* @route '/admin/inventory/{product}/adjust'
+*/
+const adjustForm = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: adjust.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::adjust
+* @see app/Http/Controllers/Admin/InventoryController.php:61
+* @route '/admin/inventory/{product}/adjust'
+*/
+adjustForm.post = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: adjust.url(args, options),
+    method: 'post',
+})
+
+adjust.form = adjustForm
 
 /**
 * @see \App\Http\Controllers\Admin\InventoryController::movements
 * @see app/Http/Controllers/Admin/InventoryController.php:75
 * @route '/admin/inventory/{product}/movements'
 */
-export const movements = (args: { product: number | { id: number } } | [product: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const movements = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: movements.url(args, options),
     method: 'get',
 })
@@ -375,7 +641,7 @@ movements.definition = {
 * @see app/Http/Controllers/Admin/InventoryController.php:75
 * @route '/admin/inventory/{product}/movements'
 */
-movements.url = (args: { product: number | { id: number } } | [product: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+movements.url = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { product: args }
     }
@@ -408,7 +674,7 @@ movements.url = (args: { product: number | { id: number } } | [product: number |
 * @see app/Http/Controllers/Admin/InventoryController.php:75
 * @route '/admin/inventory/{product}/movements'
 */
-movements.get = (args: { product: number | { id: number } } | [product: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+movements.get = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: movements.url(args, options),
     method: 'get',
 })
@@ -418,10 +684,47 @@ movements.get = (args: { product: number | { id: number } } | [product: number |
 * @see app/Http/Controllers/Admin/InventoryController.php:75
 * @route '/admin/inventory/{product}/movements'
 */
-movements.head = (args: { product: number | { id: number } } | [product: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+movements.head = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: movements.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::movements
+* @see app/Http/Controllers/Admin/InventoryController.php:75
+* @route '/admin/inventory/{product}/movements'
+*/
+const movementsForm = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: movements.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::movements
+* @see app/Http/Controllers/Admin/InventoryController.php:75
+* @route '/admin/inventory/{product}/movements'
+*/
+movementsForm.get = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: movements.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::movements
+* @see app/Http/Controllers/Admin/InventoryController.php:75
+* @route '/admin/inventory/{product}/movements'
+*/
+movementsForm.head = (args: { product: string | number | { id: string | number } } | [product: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: movements.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+movements.form = movementsForm
 
 const InventoryController = { index, reorder, valuation, allMovements, exportMethod, physicalCount, applyPhysicalCount, adjust, movements, export: exportMethod }
 

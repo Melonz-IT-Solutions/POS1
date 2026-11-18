@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\InventoryController::all
 * @see app/Http/Controllers/Admin/InventoryController.php:290
@@ -43,3 +43,39 @@ all.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::all
+* @see app/Http/Controllers/Admin/InventoryController.php:290
+* @route '/admin/inventory/movements/all'
+*/
+const allForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: all.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::all
+* @see app/Http/Controllers/Admin/InventoryController.php:290
+* @route '/admin/inventory/movements/all'
+*/
+allForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: all.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\InventoryController::all
+* @see app/Http/Controllers/Admin/InventoryController.php:290
+* @route '/admin/inventory/movements/all'
+*/
+allForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: all.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+all.form = allForm

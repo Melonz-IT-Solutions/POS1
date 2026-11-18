@@ -51,6 +51,7 @@ import {
     Users,
     X,
     Zap,
+    WashingMachine,
 } from '@lucide/vue';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { Component } from 'vue';
@@ -92,6 +93,7 @@ const storeTypes: { name: string; icon: Component }[] = [
     { name: 'Coffee Shop', icon: Coffee },
     { name: 'Pharmacy', icon: Pill },
     { name: 'Grocery', icon: ShoppingBasket },
+    { name: 'Laundry', icon: WashingMachine },
     { name: 'Minimart', icon: Store },
     { name: 'Hardware', icon: Hammer },
     { name: 'Wholesaler', icon: Warehouse },
@@ -141,9 +143,9 @@ function isActiveItem(section: string, title: string): boolean {
 /* ── Dashboard sample data ── */
 const kpis = [
     { label: "Today's Revenue", value: '₱48,215.00', sub: '+12.4% vs yesterday', icon: TrendingUp, chip: 'bg-primary/10 text-primary', subClass: 'text-emerald-600' },
-    { label: 'Transactions', value: '326', sub: '+8.1% vs yesterday', icon: ShoppingCart, chip: 'bg-sky-50 text-sky-600', subClass: 'text-emerald-600' },
-    { label: 'Avg Sale', value: '₱147.90', sub: '₱5,166 VAT · ₱1,240 discounts', icon: BarChart3, chip: 'bg-violet-50 text-violet-600', subClass: 'text-muted-foreground' },
-    { label: 'This Month', value: '₱812,430.00', sub: '5,492 transactions', icon: TrendingUp, chip: 'bg-emerald-50 text-emerald-600', subClass: 'text-muted-foreground' },
+    { label: 'Transactions', value: '326', sub: '+8.1% vs yesterday', icon: ShoppingCart, chip: 'bg-sky-50 dark:bg-sky-500/15 text-sky-600', subClass: 'text-emerald-600' },
+    { label: 'Avg Sale', value: '₱147.90', sub: '₱5,166 VAT · ₱1,240 discounts', icon: BarChart3, chip: 'bg-violet-50 dark:bg-violet-500/15 text-violet-600', subClass: 'text-muted-foreground' },
+    { label: 'This Month', value: '₱812,430.00', sub: '5,492 transactions', icon: TrendingUp, chip: 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-600', subClass: 'text-muted-foreground' },
 ];
 
 const quickActions = [
@@ -166,10 +168,10 @@ const week = [
 
 /* ── POS sample data (VAT-inclusive, total ₱434.00) ── */
 const cartItems = [
-    { name: 'Coca-Cola 1.5L', sku: 'BEV-0012', price: '₱85.00', qty: 2, total: '₱170.00', tint: 'bg-red-50 text-red-500' },
-    { name: 'Bear Brand 320g', sku: 'DRY-0045', price: '₱112.00', qty: 1, total: '₱112.00', tint: 'bg-sky-50 text-sky-500' },
-    { name: 'Lucky Me Pancit Canton', sku: 'NDL-0003', price: '₱18.50', qty: 4, total: '₱74.00', tint: 'bg-amber-50 text-amber-500' },
-    { name: 'Gardenia Classic Loaf', sku: 'BAK-0101', price: '₱78.00', qty: 1, total: '₱78.00', tint: 'bg-emerald-50 text-emerald-500' },
+    { name: 'Coca-Cola 1.5L', sku: 'BEV-0012', price: '₱85.00', qty: 2, total: '₱170.00', tint: 'bg-red-50 dark:bg-red-500/15 text-red-500' },
+    { name: 'Bear Brand 320g', sku: 'DRY-0045', price: '₱112.00', qty: 1, total: '₱112.00', tint: 'bg-sky-50 dark:bg-sky-500/15 text-sky-500' },
+    { name: 'Lucky Me Pancit Canton', sku: 'NDL-0003', price: '₱18.50', qty: 4, total: '₱74.00', tint: 'bg-amber-50 dark:bg-amber-500/15 text-amber-500' },
+    { name: 'Gardenia Classic Loaf', sku: 'BAK-0101', price: '₱78.00', qty: 1, total: '₱78.00', tint: 'bg-emerald-50 dark:bg-emerald-500/15 text-emerald-500' },
 ];
 
 /* ── Sales report sample data ── */
@@ -366,10 +368,10 @@ const plans: Plan[] = [
 
     <div class="bg-background text-foreground min-h-screen font-sans">
         <!-- Nav -->
-        <header class="sticky top-0 z-30 border-b bg-white/80 backdrop-blur">
+        <header class="sticky top-0 z-30 border-b bg-background/80 backdrop-blur">
             <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
                 <a href="#" class="flex items-center gap-2">
-                    <img src="/images/POS1-app-icon.png" alt="POS1" class="h-8 w-8" />
+                    <img src="/images/POS1-app-icon.png" alt="POS1" class="h-8 w-8 rounded-md" />
                     <span class="text-lg font-bold tracking-tight">POS<span class="text-primary">1</span></span>
                 </a>
                 <div class="text-muted-foreground hidden items-center gap-8 text-sm md:flex">
@@ -410,7 +412,8 @@ const plans: Plan[] = [
                     Free 2-week trial, POS hardware included
                     <ArrowRight class="h-3.5 w-3.5" />
                 </a>
-                <img src="/images/pos_cover.png" alt="POS1 — No.1 POS Software" class="mx-auto w-full max-w-3xl rounded-2xl" />
+                <img src="/images/pos_cover.png" alt="POS1 — No.1 POS Software" class="mx-auto w-full max-w-3xl rounded-2xl dark:hidden" />
+                <img src="/images/pos_cover_dark.png" alt="POS1 — No.1 POS Software" class="mx-auto hidden w-full max-w-3xl rounded-2xl dark:block" />
                 <h1 class="mx-auto -mt-4 max-w-3xl text-3xl font-bold tracking-tight sm:text-5xl">
                     The POS built for
                     <span class="text-primary">Philippine retail</span>
@@ -446,7 +449,7 @@ const plans: Plan[] = [
                         <div
                             v-for="t in storeTypes"
                             :key="t.name"
-                            class="hover:border-primary hover:text-primary flex shrink-0 items-center gap-3 rounded-xl border bg-white px-5 py-3 shadow-sm transition-colors"
+                            class="hover:border-primary hover:text-primary flex shrink-0 items-center gap-3 rounded-xl border bg-card px-5 py-3 shadow-sm transition-colors"
                         >
                             <span class="bg-primary/10 text-primary flex h-9 w-9 items-center justify-center rounded-lg">
                                 <component :is="t.icon" class="h-5 w-5" />
@@ -472,7 +475,7 @@ const plans: Plan[] = [
                         :key="p.key"
                         type="button"
                         class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition"
-                        :class="active === p.key ? 'text-primary bg-white shadow' : 'text-muted-foreground hover:text-foreground'"
+                        :class="active === p.key ? 'text-primary bg-background shadow' : 'text-muted-foreground hover:text-foreground'"
                         @click="active = p.key"
                     >
                         <component :is="p.icon" class="h-4 w-4" />
@@ -483,12 +486,12 @@ const plans: Plan[] = [
             <p class="text-muted-foreground mb-6 text-center text-sm">{{ activePeek.caption }}</p>
 
             <!-- Browser frame -->
-            <div class="overflow-hidden rounded-2xl border bg-white shadow-2xl shadow-slate-900/10">
-                <div class="flex items-center gap-2 border-b bg-slate-50 px-4 py-3">
+            <div class="overflow-hidden rounded-2xl border bg-card shadow-2xl shadow-slate-900/10">
+                <div class="flex items-center gap-2 border-b bg-muted px-4 py-3">
                     <span class="h-3 w-3 rounded-full bg-red-400" />
                     <span class="h-3 w-3 rounded-full bg-amber-400" />
                     <span class="h-3 w-3 rounded-full bg-emerald-400" />
-                    <div class="text-muted-foreground mx-auto w-full max-w-sm rounded-md bg-white px-3 py-1 text-center text-xs">
+                    <div class="text-muted-foreground mx-auto w-full max-w-sm rounded-md bg-card px-3 py-1 text-center text-xs">
                         https://pos1.ph/{{ active === 'pos' ? 'pos' : active === 'dashboard' ? 'dashboard' : 'admin/reports/sales' }}
                     </div>
                 </div>
@@ -547,7 +550,7 @@ const plans: Plan[] = [
                             </aside>
 
                             <!-- Inset content -->
-                            <main class="m-2 ml-0 flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl bg-white shadow-sm">
+                            <main class="m-2 ml-0 flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl bg-card shadow-sm">
                                 <div class="flex h-14 shrink-0 items-center gap-2 border-b px-4 text-sm">
                                     <PanelLeft class="h-4 w-4" />
                                     <template v-if="active === 'dashboard'">Dashboard</template>
@@ -690,7 +693,7 @@ const plans: Plan[] = [
                         </div>
 
                         <!-- ═════ POS Terminal (full-screen, mirrors pos/Index.vue) ═════ -->
-                        <div v-else class="flex h-full flex-col bg-white">
+                        <div v-else class="flex h-full flex-col bg-card">
                             <header class="flex shrink-0 items-center gap-4 border-b px-4 py-2">
                                 <div class="text-sm font-bold">POS1</div>
                                 <div class="text-muted-foreground text-xs">Cashier: <span class="text-foreground font-medium">Maria Santos</span></div>
@@ -837,7 +840,7 @@ const plans: Plan[] = [
                             :class="i % 2 === 1 ? 'lg:order-1' : ''"
                         >
                             <!-- Checkout: Process Payment modal -->
-                            <div v-if="f.key === 'checkout'" class="mx-auto max-w-sm rounded-xl border bg-white text-sm shadow-xl">
+                            <div v-if="f.key === 'checkout'" class="mx-auto max-w-sm rounded-xl border bg-card text-sm shadow-xl">
                                 <div class="border-b px-5 py-3 font-semibold">Process Payment</div>
                                 <div class="space-y-4 p-5">
                                     <div class="text-center">
@@ -864,7 +867,7 @@ const plans: Plan[] = [
                             </div>
 
                             <!-- BIR: SC/PWD receipt -->
-                            <div v-else-if="f.key === 'bir'" class="mx-auto max-w-xs bg-white px-6 pt-6 pb-8 font-mono text-xs shadow-xl [mask-image:linear-gradient(to_bottom,black_94%,transparent)]">
+                            <div v-else-if="f.key === 'bir'" class="mx-auto max-w-xs bg-card px-6 pt-6 pb-8 font-mono text-xs shadow-xl [mask-image:linear-gradient(to_bottom,black_94%,transparent)]">
                                 <div class="text-center">
                                     <div class="font-sans text-sm font-bold">POS1 DEMO STORE</div>
                                     <div class="text-muted-foreground">VAT REG TIN 123-456-789-000</div>
@@ -886,13 +889,13 @@ const plans: Plan[] = [
                                     <div class="flex justify-between"><span>VAT-Exempt Sales</span><span>500.00</span></div>
                                     <div class="flex justify-between"><span>VAT Amount</span><span>0.00</span></div>
                                 </div>
-                                <div class="mt-3 rounded bg-emerald-50 px-2 py-1 text-center font-sans text-[10px] font-bold tracking-wide text-emerald-700 uppercase">
+                                <div class="mt-3 rounded bg-emerald-50 dark:bg-emerald-500/15 px-2 py-1 text-center font-sans text-[10px] font-bold tracking-wide text-emerald-700 uppercase dark:text-emerald-300">
                                     SC ID: 2026-00418 · Juan Dela Cruz
                                 </div>
                             </div>
 
                             <!-- Stock: Reorder Dashboard -->
-                            <div v-else-if="f.key === 'stock'" class="space-y-3 rounded-xl border bg-white p-4 text-sm shadow-xl">
+                            <div v-else-if="f.key === 'stock'" class="space-y-3 rounded-xl border bg-card p-4 text-sm shadow-xl">
                                 <div class="grid grid-cols-3 gap-2">
                                     <div class="rounded-lg border p-2.5">
                                         <div class="flex items-center gap-1 text-xs text-orange-600"><AlertTriangle class="h-3.5 w-3.5" />Low Stock</div>
@@ -935,7 +938,7 @@ const plans: Plan[] = [
                             </div>
 
                             <!-- Loyalty: Customer profile -->
-                            <div v-else class="space-y-4 rounded-xl border bg-white p-5 text-sm shadow-xl">
+                            <div v-else class="space-y-4 rounded-xl border bg-card p-5 text-sm shadow-xl">
                                 <div class="flex items-center gap-3">
                                     <span class="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-full text-lg font-semibold">MS</span>
                                     <div>
@@ -973,7 +976,7 @@ const plans: Plan[] = [
                 </div>
 
                 <!-- And much more -->
-                <div class="mt-24 rounded-2xl border bg-white p-8">
+                <div class="mt-24 rounded-2xl border bg-card p-8">
                     <h3 class="text-center text-lg font-semibold">And much more, built in</h3>
                     <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                         <div v-for="m in moreFeatures" :key="m.label" class="flex items-center gap-3 rounded-lg border px-3 py-2.5 text-sm">
@@ -993,7 +996,7 @@ const plans: Plan[] = [
                 <div class="relative grid gap-10 p-8 sm:p-12 lg:grid-cols-2 lg:items-center">
                     <!-- Copy -->
                     <div>
-                        <span class="bg-primary inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase">
+                        <span class="bg-primary text-primary-foreground inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold tracking-wide uppercase">
                             <Gift class="h-3.5 w-3.5" /> Limited offer
                         </span>
                         <h2 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
@@ -1038,7 +1041,7 @@ const plans: Plan[] = [
                                 :key="hw.name"
                                 class="rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur transition-colors hover:border-blue-300/40 hover:bg-white/10"
                             >
-                                <span class="bg-primary flex h-12 w-12 items-center justify-center rounded-xl">
+                                <span class="bg-primary text-primary-foreground flex h-12 w-12 items-center justify-center rounded-xl">
                                     <component :is="hw.icon" class="h-6 w-6" />
                                 </span>
                                 <div class="mt-4 font-semibold">{{ hw.name }}</div>
@@ -1074,7 +1077,7 @@ const plans: Plan[] = [
                 <div
                     v-for="plan in plans"
                     :key="plan.name"
-                    class="relative flex h-full flex-col rounded-2xl border bg-white p-8"
+                    class="relative flex h-full flex-col rounded-2xl border bg-card p-8"
                     :class="plan.highlight ? 'border-primary ring-primary shadow-primary/10 shadow-xl ring-1 lg:-mt-4 lg:pb-12' : ''"
                 >
                     <span
@@ -1109,7 +1112,7 @@ const plans: Plan[] = [
                             <Globe class="text-primary mt-0.5 h-4 w-4 shrink-0" />
                             <div>
                                 Own custom domain
-                                <div class="text-primary border-primary/20 mt-1 inline-block rounded-md border bg-white px-2 py-0.5 font-mono text-xs font-medium">
+                                <div class="text-primary border-primary/20 mt-1 inline-block rounded-md border bg-card px-2 py-0.5 font-mono text-xs font-medium">
                                     https://{{ plan.domain }}
                                 </div>
                             </div>
@@ -1152,7 +1155,7 @@ const plans: Plan[] = [
         </section>
 
         <footer class="text-muted-foreground border-t py-8 text-center text-sm">
-            © {{ new Date().getFullYear() }} POS1 — No.1 POS Software · Powered by Melonz IT Solutions
+            © {{ new Date().getFullYear() }} POS1 — No.1 POS Software · Powered by <a href="https://www.melonz.io" target="_blank" class="hover:underline">Melonz IT Solutions</a>
         </footer>
     </div>
 </template>

@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\POS\ProductLookupController::search
 * @see app/Http/Controllers/POS/ProductLookupController.php:15
@@ -42,6 +42,43 @@ search.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: search.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\POS\ProductLookupController::search
+* @see app/Http/Controllers/POS/ProductLookupController.php:15
+* @route '/pos/products/search'
+*/
+const searchForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: search.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ProductLookupController::search
+* @see app/Http/Controllers/POS/ProductLookupController.php:15
+* @route '/pos/products/search'
+*/
+searchForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: search.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ProductLookupController::search
+* @see app/Http/Controllers/POS/ProductLookupController.php:15
+* @route '/pos/products/search'
+*/
+searchForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: search.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+search.form = searchForm
 
 /**
 * @see \App\Http\Controllers\POS\ProductLookupController::browse
@@ -88,6 +125,43 @@ browse.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\ProductLookupController::browse
+* @see app/Http/Controllers/POS/ProductLookupController.php:26
+* @route '/pos/products/browse'
+*/
+const browseForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: browse.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ProductLookupController::browse
+* @see app/Http/Controllers/POS/ProductLookupController.php:26
+* @route '/pos/products/browse'
+*/
+browseForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: browse.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ProductLookupController::browse
+* @see app/Http/Controllers/POS/ProductLookupController.php:26
+* @route '/pos/products/browse'
+*/
+browseForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: browse.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+browse.form = browseForm
+
+/**
 * @see \App\Http\Controllers\POS\ProductLookupController::barcode
 * @see app/Http/Controllers/POS/ProductLookupController.php:40
 * @route '/pos/products/barcode'
@@ -130,6 +204,43 @@ barcode.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: barcode.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\POS\ProductLookupController::barcode
+* @see app/Http/Controllers/POS/ProductLookupController.php:40
+* @route '/pos/products/barcode'
+*/
+const barcodeForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: barcode.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ProductLookupController::barcode
+* @see app/Http/Controllers/POS/ProductLookupController.php:40
+* @route '/pos/products/barcode'
+*/
+barcodeForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: barcode.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ProductLookupController::barcode
+* @see app/Http/Controllers/POS/ProductLookupController.php:40
+* @route '/pos/products/barcode'
+*/
+barcodeForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: barcode.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+barcode.form = barcodeForm
 
 const ProductLookupController = { search, browse, barcode }
 

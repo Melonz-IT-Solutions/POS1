@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\DiscountController::index
 * @see app/Http/Controllers/Admin/DiscountController.php:20
@@ -42,6 +42,43 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::index
+* @see app/Http/Controllers/Admin/DiscountController.php:20
+* @route '/admin/discounts'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::index
+* @see app/Http/Controllers/Admin/DiscountController.php:20
+* @route '/admin/discounts'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::index
+* @see app/Http/Controllers/Admin/DiscountController.php:20
+* @route '/admin/discounts'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\Admin\DiscountController::create
@@ -88,6 +125,43 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\DiscountController::create
+* @see app/Http/Controllers/Admin/DiscountController.php:48
+* @route '/admin/discounts/create'
+*/
+const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::create
+* @see app/Http/Controllers/Admin/DiscountController.php:48
+* @route '/admin/discounts/create'
+*/
+createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::create
+* @see app/Http/Controllers/Admin/DiscountController.php:48
+* @route '/admin/discounts/create'
+*/
+createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+create.form = createForm
+
+/**
 * @see \App\Http\Controllers\Admin\DiscountController::store
 * @see app/Http/Controllers/Admin/DiscountController.php:59
 * @route '/admin/discounts'
@@ -122,11 +196,33 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\DiscountController::store
+* @see app/Http/Controllers/Admin/DiscountController.php:59
+* @route '/admin/discounts'
+*/
+const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::store
+* @see app/Http/Controllers/Admin/DiscountController.php:59
+* @route '/admin/discounts'
+*/
+storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+store.form = storeForm
+
+/**
 * @see \App\Http\Controllers\Admin\DiscountController::show
 * @see app/Http/Controllers/Admin/DiscountController.php:71
 * @route '/admin/discounts/{discount}'
 */
-export const show = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -141,7 +237,7 @@ show.definition = {
 * @see app/Http/Controllers/Admin/DiscountController.php:71
 * @route '/admin/discounts/{discount}'
 */
-show.url = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+show.url = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { discount: args }
     }
@@ -174,7 +270,7 @@ show.url = (args: { discount: number | { id: number } } | [discount: number | { 
 * @see app/Http/Controllers/Admin/DiscountController.php:71
 * @route '/admin/discounts/{discount}'
 */
-show.get = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -184,17 +280,54 @@ show.get = (args: { discount: number | { id: number } } | [discount: number | { 
 * @see app/Http/Controllers/Admin/DiscountController.php:71
 * @route '/admin/discounts/{discount}'
 */
-show.head = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::show
+* @see app/Http/Controllers/Admin/DiscountController.php:71
+* @route '/admin/discounts/{discount}'
+*/
+const showForm = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::show
+* @see app/Http/Controllers/Admin/DiscountController.php:71
+* @route '/admin/discounts/{discount}'
+*/
+showForm.get = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::show
+* @see app/Http/Controllers/Admin/DiscountController.php:71
+* @route '/admin/discounts/{discount}'
+*/
+showForm.head = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+show.form = showForm
 
 /**
 * @see \App\Http\Controllers\Admin\DiscountController::edit
 * @see app/Http/Controllers/Admin/DiscountController.php:83
 * @route '/admin/discounts/{discount}/edit'
 */
-export const edit = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const edit = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
     method: 'get',
 })
@@ -209,7 +342,7 @@ edit.definition = {
 * @see app/Http/Controllers/Admin/DiscountController.php:83
 * @route '/admin/discounts/{discount}/edit'
 */
-edit.url = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+edit.url = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { discount: args }
     }
@@ -242,7 +375,7 @@ edit.url = (args: { discount: number | { id: number } } | [discount: number | { 
 * @see app/Http/Controllers/Admin/DiscountController.php:83
 * @route '/admin/discounts/{discount}/edit'
 */
-edit.get = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+edit.get = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
     method: 'get',
 })
@@ -252,17 +385,54 @@ edit.get = (args: { discount: number | { id: number } } | [discount: number | { 
 * @see app/Http/Controllers/Admin/DiscountController.php:83
 * @route '/admin/discounts/{discount}/edit'
 */
-edit.head = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+edit.head = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: edit.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::edit
+* @see app/Http/Controllers/Admin/DiscountController.php:83
+* @route '/admin/discounts/{discount}/edit'
+*/
+const editForm = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::edit
+* @see app/Http/Controllers/Admin/DiscountController.php:83
+* @route '/admin/discounts/{discount}/edit'
+*/
+editForm.get = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::edit
+* @see app/Http/Controllers/Admin/DiscountController.php:83
+* @route '/admin/discounts/{discount}/edit'
+*/
+editForm.head = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\Admin\DiscountController::update
 * @see app/Http/Controllers/Admin/DiscountController.php:97
 * @route '/admin/discounts/{discount}'
 */
-export const update = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+export const update = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
     method: 'put',
 })
@@ -277,7 +447,7 @@ update.definition = {
 * @see app/Http/Controllers/Admin/DiscountController.php:97
 * @route '/admin/discounts/{discount}'
 */
-update.url = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+update.url = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { discount: args }
     }
@@ -310,7 +480,7 @@ update.url = (args: { discount: number | { id: number } } | [discount: number | 
 * @see app/Http/Controllers/Admin/DiscountController.php:97
 * @route '/admin/discounts/{discount}'
 */
-update.put = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+update.put = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
     method: 'put',
 })
@@ -320,17 +490,64 @@ update.put = (args: { discount: number | { id: number } } | [discount: number | 
 * @see app/Http/Controllers/Admin/DiscountController.php:97
 * @route '/admin/discounts/{discount}'
 */
-update.patch = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
+update.patch = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
     url: update.url(args, options),
     method: 'patch',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::update
+* @see app/Http/Controllers/Admin/DiscountController.php:97
+* @route '/admin/discounts/{discount}'
+*/
+const updateForm = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::update
+* @see app/Http/Controllers/Admin/DiscountController.php:97
+* @route '/admin/discounts/{discount}'
+*/
+updateForm.put = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::update
+* @see app/Http/Controllers/Admin/DiscountController.php:97
+* @route '/admin/discounts/{discount}'
+*/
+updateForm.patch = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PATCH',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\Admin\DiscountController::destroy
 * @see app/Http/Controllers/Admin/DiscountController.php:110
 * @route '/admin/discounts/{discount}'
 */
-export const destroy = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+export const destroy = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
     method: 'delete',
 })
@@ -345,7 +562,7 @@ destroy.definition = {
 * @see app/Http/Controllers/Admin/DiscountController.php:110
 * @route '/admin/discounts/{discount}'
 */
-destroy.url = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+destroy.url = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { discount: args }
     }
@@ -378,10 +595,42 @@ destroy.url = (args: { discount: number | { id: number } } | [discount: number |
 * @see app/Http/Controllers/Admin/DiscountController.php:110
 * @route '/admin/discounts/{discount}'
 */
-destroy.delete = (args: { discount: number | { id: number } } | [discount: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+destroy.delete = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::destroy
+* @see app/Http/Controllers/Admin/DiscountController.php:110
+* @route '/admin/discounts/{discount}'
+*/
+const destroyForm = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::destroy
+* @see app/Http/Controllers/Admin/DiscountController.php:110
+* @route '/admin/discounts/{discount}'
+*/
+destroyForm.delete = (args: { discount: string | number | { id: string | number } } | [discount: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+destroy.form = destroyForm
 
 /**
 * @see \App\Http\Controllers\Admin\DiscountController::restore
@@ -434,6 +683,28 @@ restore.post = (args: { id: string | number } | [id: string | number ] | string 
     url: restore.url(args, options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::restore
+* @see app/Http/Controllers/Admin/DiscountController.php:121
+* @route '/admin/discounts/{id}/restore'
+*/
+const restoreForm = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: restore.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\DiscountController::restore
+* @see app/Http/Controllers/Admin/DiscountController.php:121
+* @route '/admin/discounts/{id}/restore'
+*/
+restoreForm.post = (args: { id: string | number } | [id: string | number ] | string | number, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: restore.url(args, options),
+    method: 'post',
+})
+
+restore.form = restoreForm
 
 const discounts = {
     index: Object.assign(index, index),

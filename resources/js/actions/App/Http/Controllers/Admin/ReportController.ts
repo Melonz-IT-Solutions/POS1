@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\ReportController::sales
 * @see app/Http/Controllers/Admin/ReportController.php:22
@@ -42,6 +42,43 @@ sales.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: sales.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::sales
+* @see app/Http/Controllers/Admin/ReportController.php:22
+* @route '/admin/reports/sales'
+*/
+const salesForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: sales.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::sales
+* @see app/Http/Controllers/Admin/ReportController.php:22
+* @route '/admin/reports/sales'
+*/
+salesForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: sales.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::sales
+* @see app/Http/Controllers/Admin/ReportController.php:22
+* @route '/admin/reports/sales'
+*/
+salesForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: sales.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+sales.form = salesForm
 
 /**
 * @see \App\Http\Controllers\Admin\ReportController::products
@@ -88,6 +125,43 @@ products.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\ReportController::products
+* @see app/Http/Controllers/Admin/ReportController.php:75
+* @route '/admin/reports/products'
+*/
+const productsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: products.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::products
+* @see app/Http/Controllers/Admin/ReportController.php:75
+* @route '/admin/reports/products'
+*/
+productsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: products.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::products
+* @see app/Http/Controllers/Admin/ReportController.php:75
+* @route '/admin/reports/products'
+*/
+productsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: products.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+products.form = productsForm
+
+/**
 * @see \App\Http\Controllers\Admin\ReportController::cashiers
 * @see app/Http/Controllers/Admin/ReportController.php:125
 * @route '/admin/reports/cashiers'
@@ -130,6 +204,43 @@ cashiers.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: cashiers.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::cashiers
+* @see app/Http/Controllers/Admin/ReportController.php:125
+* @route '/admin/reports/cashiers'
+*/
+const cashiersForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: cashiers.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::cashiers
+* @see app/Http/Controllers/Admin/ReportController.php:125
+* @route '/admin/reports/cashiers'
+*/
+cashiersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: cashiers.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::cashiers
+* @see app/Http/Controllers/Admin/ReportController.php:125
+* @route '/admin/reports/cashiers'
+*/
+cashiersForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: cashiers.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+cashiers.form = cashiersForm
 
 /**
 * @see \App\Http\Controllers\Admin\ReportController::customers
@@ -176,6 +287,43 @@ customers.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\ReportController::customers
+* @see app/Http/Controllers/Admin/ReportController.php:401
+* @route '/admin/reports/customers'
+*/
+const customersForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: customers.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::customers
+* @see app/Http/Controllers/Admin/ReportController.php:401
+* @route '/admin/reports/customers'
+*/
+customersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: customers.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::customers
+* @see app/Http/Controllers/Admin/ReportController.php:401
+* @route '/admin/reports/customers'
+*/
+customersForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: customers.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+customers.form = customersForm
+
+/**
 * @see \App\Http\Controllers\Admin\ReportController::tax
 * @see app/Http/Controllers/Admin/ReportController.php:345
 * @route '/admin/reports/tax'
@@ -218,6 +366,43 @@ tax.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: tax.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::tax
+* @see app/Http/Controllers/Admin/ReportController.php:345
+* @route '/admin/reports/tax'
+*/
+const taxForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: tax.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::tax
+* @see app/Http/Controllers/Admin/ReportController.php:345
+* @route '/admin/reports/tax'
+*/
+taxForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: tax.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::tax
+* @see app/Http/Controllers/Admin/ReportController.php:345
+* @route '/admin/reports/tax'
+*/
+taxForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: tax.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+tax.form = taxForm
 
 /**
 * @see \App\Http\Controllers\Admin\ReportController::hourly
@@ -264,6 +449,43 @@ hourly.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\ReportController::hourly
+* @see app/Http/Controllers/Admin/ReportController.php:282
+* @route '/admin/reports/hourly'
+*/
+const hourlyForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: hourly.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::hourly
+* @see app/Http/Controllers/Admin/ReportController.php:282
+* @route '/admin/reports/hourly'
+*/
+hourlyForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: hourly.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::hourly
+* @see app/Http/Controllers/Admin/ReportController.php:282
+* @route '/admin/reports/hourly'
+*/
+hourlyForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: hourly.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+hourly.form = hourlyForm
+
+/**
 * @see \App\Http\Controllers\Admin\ReportController::suppliers
 * @see app/Http/Controllers/Admin/ReportController.php:233
 * @route '/admin/reports/suppliers'
@@ -306,6 +528,43 @@ suppliers.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: suppliers.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::suppliers
+* @see app/Http/Controllers/Admin/ReportController.php:233
+* @route '/admin/reports/suppliers'
+*/
+const suppliersForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: suppliers.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::suppliers
+* @see app/Http/Controllers/Admin/ReportController.php:233
+* @route '/admin/reports/suppliers'
+*/
+suppliersForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: suppliers.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::suppliers
+* @see app/Http/Controllers/Admin/ReportController.php:233
+* @route '/admin/reports/suppliers'
+*/
+suppliersForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: suppliers.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+suppliers.form = suppliersForm
 
 /**
 * @see \App\Http\Controllers\Admin\ReportController::refunds
@@ -352,6 +611,43 @@ refunds.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\ReportController::refunds
+* @see app/Http/Controllers/Admin/ReportController.php:161
+* @route '/admin/reports/refunds'
+*/
+const refundsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: refunds.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::refunds
+* @see app/Http/Controllers/Admin/ReportController.php:161
+* @route '/admin/reports/refunds'
+*/
+refundsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: refunds.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::refunds
+* @see app/Http/Controllers/Admin/ReportController.php:161
+* @route '/admin/reports/refunds'
+*/
+refundsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: refunds.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+refunds.form = refundsForm
+
+/**
 * @see \App\Http\Controllers\Admin\ReportController::profitLoss
 * @see app/Http/Controllers/Admin/ReportController.php:571
 * @route '/admin/reports/profit-loss'
@@ -394,6 +690,43 @@ profitLoss.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: profitLoss.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::profitLoss
+* @see app/Http/Controllers/Admin/ReportController.php:571
+* @route '/admin/reports/profit-loss'
+*/
+const profitLossForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: profitLoss.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::profitLoss
+* @see app/Http/Controllers/Admin/ReportController.php:571
+* @route '/admin/reports/profit-loss'
+*/
+profitLossForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: profitLoss.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::profitLoss
+* @see app/Http/Controllers/Admin/ReportController.php:571
+* @route '/admin/reports/profit-loss'
+*/
+profitLossForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: profitLoss.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+profitLoss.form = profitLossForm
 
 /**
 * @see \App\Http\Controllers\Admin\ReportController::voids
@@ -440,6 +773,43 @@ voids.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\ReportController::voids
+* @see app/Http/Controllers/Admin/ReportController.php:463
+* @route '/admin/reports/voids'
+*/
+const voidsForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: voids.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::voids
+* @see app/Http/Controllers/Admin/ReportController.php:463
+* @route '/admin/reports/voids'
+*/
+voidsForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: voids.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::voids
+* @see app/Http/Controllers/Admin/ReportController.php:463
+* @route '/admin/reports/voids'
+*/
+voidsForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: voids.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+voids.form = voidsForm
+
+/**
 * @see \App\Http\Controllers\Admin\ReportController::birExport
 * @see app/Http/Controllers/Admin/ReportController.php:526
 * @route '/admin/reports/bir-export'
@@ -482,6 +852,43 @@ birExport.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: birExport.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::birExport
+* @see app/Http/Controllers/Admin/ReportController.php:526
+* @route '/admin/reports/bir-export'
+*/
+const birExportForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: birExport.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::birExport
+* @see app/Http/Controllers/Admin/ReportController.php:526
+* @route '/admin/reports/bir-export'
+*/
+birExportForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: birExport.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ReportController::birExport
+* @see app/Http/Controllers/Admin/ReportController.php:526
+* @route '/admin/reports/bir-export'
+*/
+birExportForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: birExport.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+birExport.form = birExportForm
 
 const ReportController = { sales, products, cashiers, customers, tax, hourly, suppliers, refunds, profitLoss, voids, birExport }
 

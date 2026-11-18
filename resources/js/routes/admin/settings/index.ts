@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\SystemSettingsController::index
 * @see app/Http/Controllers/Admin/SystemSettingsController.php:17
@@ -44,6 +44,43 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\SystemSettingsController::index
+* @see app/Http/Controllers/Admin/SystemSettingsController.php:17
+* @route '/admin/settings'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\SystemSettingsController::index
+* @see app/Http/Controllers/Admin/SystemSettingsController.php:17
+* @route '/admin/settings'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\SystemSettingsController::index
+* @see app/Http/Controllers/Admin/SystemSettingsController.php:17
+* @route '/admin/settings'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
+
+/**
 * @see \App\Http\Controllers\Admin\SystemSettingsController::update
 * @see app/Http/Controllers/Admin/SystemSettingsController.php:34
 * @route '/admin/settings'
@@ -76,6 +113,28 @@ update.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: update.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\SystemSettingsController::update
+* @see app/Http/Controllers/Admin/SystemSettingsController.php:34
+* @route '/admin/settings'
+*/
+const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\SystemSettingsController::update
+* @see app/Http/Controllers/Admin/SystemSettingsController.php:34
+* @route '/admin/settings'
+*/
+updateForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(options),
+    method: 'post',
+})
+
+update.form = updateForm
 
 const settings = {
     index: Object.assign(index, index),

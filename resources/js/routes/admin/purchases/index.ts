@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::index
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:27
@@ -42,6 +42,43 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: index.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::index
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:27
+* @route '/admin/purchases'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::index
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:27
+* @route '/admin/purchases'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::index
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:27
+* @route '/admin/purchases'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::create
@@ -88,6 +125,43 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::create
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:55
+* @route '/admin/purchases/create'
+*/
+const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::create
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:55
+* @route '/admin/purchases/create'
+*/
+createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::create
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:55
+* @route '/admin/purchases/create'
+*/
+createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+create.form = createForm
+
+/**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::store
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:72
 * @route '/admin/purchases'
@@ -122,11 +196,33 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::store
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:72
+* @route '/admin/purchases'
+*/
+const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::store
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:72
+* @route '/admin/purchases'
+*/
+storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+store.form = storeForm
+
+/**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::edit
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:151
 * @route '/admin/purchases/{purchase}/edit'
 */
-export const edit = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const edit = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
     method: 'get',
 })
@@ -141,7 +237,7 @@ edit.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:151
 * @route '/admin/purchases/{purchase}/edit'
 */
-edit.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+edit.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -174,7 +270,7 @@ edit.url = (args: { purchase: number | { id: number } } | [purchase: number | { 
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:151
 * @route '/admin/purchases/{purchase}/edit'
 */
-edit.get = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+edit.get = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: edit.url(args, options),
     method: 'get',
 })
@@ -184,17 +280,54 @@ edit.get = (args: { purchase: number | { id: number } } | [purchase: number | { 
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:151
 * @route '/admin/purchases/{purchase}/edit'
 */
-edit.head = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+edit.head = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: edit.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::edit
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:151
+* @route '/admin/purchases/{purchase}/edit'
+*/
+const editForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::edit
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:151
+* @route '/admin/purchases/{purchase}/edit'
+*/
+editForm.get = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::edit
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:151
+* @route '/admin/purchases/{purchase}/edit'
+*/
+editForm.head = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: edit.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+edit.form = editForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::update
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:172
 * @route '/admin/purchases/{purchase}'
 */
-export const update = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+export const update = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
     method: 'put',
 })
@@ -209,7 +342,7 @@ update.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:172
 * @route '/admin/purchases/{purchase}'
 */
-update.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+update.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -242,7 +375,7 @@ update.url = (args: { purchase: number | { id: number } } | [purchase: number | 
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:172
 * @route '/admin/purchases/{purchase}'
 */
-update.put = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
+update.put = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'put'> => ({
     url: update.url(args, options),
     method: 'put',
 })
@@ -252,17 +385,64 @@ update.put = (args: { purchase: number | { id: number } } | [purchase: number | 
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:172
 * @route '/admin/purchases/{purchase}'
 */
-update.patch = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
+update.patch = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'patch'> => ({
     url: update.url(args, options),
     method: 'patch',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::update
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:172
+* @route '/admin/purchases/{purchase}'
+*/
+const updateForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::update
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:172
+* @route '/admin/purchases/{purchase}'
+*/
+updateForm.put = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PUT',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::update
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:172
+* @route '/admin/purchases/{purchase}'
+*/
+updateForm.patch = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'PATCH',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+update.form = updateForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::destroy
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:214
 * @route '/admin/purchases/{purchase}'
 */
-export const destroy = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+export const destroy = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
     method: 'delete',
 })
@@ -277,7 +457,7 @@ destroy.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:214
 * @route '/admin/purchases/{purchase}'
 */
-destroy.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+destroy.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -310,17 +490,49 @@ destroy.url = (args: { purchase: number | { id: number } } | [purchase: number |
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:214
 * @route '/admin/purchases/{purchase}'
 */
-destroy.delete = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+destroy.delete = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: destroy.url(args, options),
     method: 'delete',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::destroy
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:214
+* @route '/admin/purchases/{purchase}'
+*/
+const destroyForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::destroy
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:214
+* @route '/admin/purchases/{purchase}'
+*/
+destroyForm.delete = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: destroy.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+destroy.form = destroyForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::print
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:114
 * @route '/admin/purchases/{purchase}/print'
 */
-export const print = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const print = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: print.url(args, options),
     method: 'get',
 })
@@ -335,7 +547,7 @@ print.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:114
 * @route '/admin/purchases/{purchase}/print'
 */
-print.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+print.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -368,7 +580,7 @@ print.url = (args: { purchase: number | { id: number } } | [purchase: number | {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:114
 * @route '/admin/purchases/{purchase}/print'
 */
-print.get = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+print.get = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: print.url(args, options),
     method: 'get',
 })
@@ -378,17 +590,54 @@ print.get = (args: { purchase: number | { id: number } } | [purchase: number | {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:114
 * @route '/admin/purchases/{purchase}/print'
 */
-print.head = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+print.head = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: print.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::print
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:114
+* @route '/admin/purchases/{purchase}/print'
+*/
+const printForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: print.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::print
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:114
+* @route '/admin/purchases/{purchase}/print'
+*/
+printForm.get = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: print.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::print
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:114
+* @route '/admin/purchases/{purchase}/print'
+*/
+printForm.head = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: print.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+print.form = printForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::show
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:134
 * @route '/admin/purchases/{purchase}'
 */
-export const show = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -403,7 +652,7 @@ show.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:134
 * @route '/admin/purchases/{purchase}'
 */
-show.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+show.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -436,7 +685,7 @@ show.url = (args: { purchase: number | { id: number } } | [purchase: number | { 
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:134
 * @route '/admin/purchases/{purchase}'
 */
-show.get = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -446,17 +695,54 @@ show.get = (args: { purchase: number | { id: number } } | [purchase: number | { 
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:134
 * @route '/admin/purchases/{purchase}'
 */
-show.head = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::show
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:134
+* @route '/admin/purchases/{purchase}'
+*/
+const showForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::show
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:134
+* @route '/admin/purchases/{purchase}'
+*/
+showForm.get = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::show
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:134
+* @route '/admin/purchases/{purchase}'
+*/
+showForm.head = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+show.form = showForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::markOrdered
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:226
 * @route '/admin/purchases/{purchase}/mark-ordered'
 */
-export const markOrdered = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const markOrdered = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: markOrdered.url(args, options),
     method: 'post',
 })
@@ -471,7 +757,7 @@ markOrdered.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:226
 * @route '/admin/purchases/{purchase}/mark-ordered'
 */
-markOrdered.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+markOrdered.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -504,17 +790,39 @@ markOrdered.url = (args: { purchase: number | { id: number } } | [purchase: numb
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:226
 * @route '/admin/purchases/{purchase}/mark-ordered'
 */
-markOrdered.post = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+markOrdered.post = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: markOrdered.url(args, options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::markOrdered
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:226
+* @route '/admin/purchases/{purchase}/mark-ordered'
+*/
+const markOrderedForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: markOrdered.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::markOrdered
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:226
+* @route '/admin/purchases/{purchase}/mark-ordered'
+*/
+markOrderedForm.post = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: markOrdered.url(args, options),
+    method: 'post',
+})
+
+markOrdered.form = markOrderedForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::cancel
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:237
 * @route '/admin/purchases/{purchase}/cancel'
 */
-export const cancel = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const cancel = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: cancel.url(args, options),
     method: 'post',
 })
@@ -529,7 +837,7 @@ cancel.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:237
 * @route '/admin/purchases/{purchase}/cancel'
 */
-cancel.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+cancel.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -562,17 +870,39 @@ cancel.url = (args: { purchase: number | { id: number } } | [purchase: number | 
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:237
 * @route '/admin/purchases/{purchase}/cancel'
 */
-cancel.post = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+cancel.post = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: cancel.url(args, options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::cancel
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:237
+* @route '/admin/purchases/{purchase}/cancel'
+*/
+const cancelForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: cancel.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::cancel
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:237
+* @route '/admin/purchases/{purchase}/cancel'
+*/
+cancelForm.post = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: cancel.url(args, options),
+    method: 'post',
+})
+
+cancel.form = cancelForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::receive
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:252
 * @route '/admin/purchases/{purchase}/receive'
 */
-export const receive = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const receive = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: receive.url(args, options),
     method: 'get',
 })
@@ -587,7 +917,7 @@ receive.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:252
 * @route '/admin/purchases/{purchase}/receive'
 */
-receive.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+receive.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -620,7 +950,7 @@ receive.url = (args: { purchase: number | { id: number } } | [purchase: number |
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:252
 * @route '/admin/purchases/{purchase}/receive'
 */
-receive.get = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+receive.get = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: receive.url(args, options),
     method: 'get',
 })
@@ -630,17 +960,54 @@ receive.get = (args: { purchase: number | { id: number } } | [purchase: number |
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:252
 * @route '/admin/purchases/{purchase}/receive'
 */
-receive.head = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+receive.head = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: receive.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::receive
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:252
+* @route '/admin/purchases/{purchase}/receive'
+*/
+const receiveForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: receive.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::receive
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:252
+* @route '/admin/purchases/{purchase}/receive'
+*/
+receiveForm.get = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: receive.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::receive
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:252
+* @route '/admin/purchases/{purchase}/receive'
+*/
+receiveForm.head = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: receive.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+receive.form = receiveForm
 
 /**
 * @see \App\Http\Controllers\Admin\PurchaseOrderController::storeReceipt
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:268
 * @route '/admin/purchases/{purchase}/receive'
 */
-export const storeReceipt = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const storeReceipt = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: storeReceipt.url(args, options),
     method: 'post',
 })
@@ -655,7 +1022,7 @@ storeReceipt.definition = {
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:268
 * @route '/admin/purchases/{purchase}/receive'
 */
-storeReceipt.url = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+storeReceipt.url = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { purchase: args }
     }
@@ -688,10 +1055,32 @@ storeReceipt.url = (args: { purchase: number | { id: number } } | [purchase: num
 * @see app/Http/Controllers/Admin/PurchaseOrderController.php:268
 * @route '/admin/purchases/{purchase}/receive'
 */
-storeReceipt.post = (args: { purchase: number | { id: number } } | [purchase: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+storeReceipt.post = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: storeReceipt.url(args, options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::storeReceipt
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:268
+* @route '/admin/purchases/{purchase}/receive'
+*/
+const storeReceiptForm = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: storeReceipt.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\PurchaseOrderController::storeReceipt
+* @see app/Http/Controllers/Admin/PurchaseOrderController.php:268
+* @route '/admin/purchases/{purchase}/receive'
+*/
+storeReceiptForm.post = (args: { purchase: string | number | { id: string | number } } | [purchase: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: storeReceipt.url(args, options),
+    method: 'post',
+})
+
+storeReceipt.form = storeReceiptForm
 
 const purchases = {
     index: Object.assign(index, index),

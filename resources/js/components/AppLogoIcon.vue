@@ -16,7 +16,7 @@ defineProps<Props>();
     <img
         src="/images/POS1-app-icon.png"
         alt="Logo"
-        class="h-10 w-10"
+        class="h-10 w-10 rounded-md"
         v-bind="$attrs">
     <!-- <svg
         xmlns="http://www.w3.org/2000/svg"

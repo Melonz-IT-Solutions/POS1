@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\ProductImportController::create
 * @see app/Http/Controllers/Admin/ProductImportController.php:17
@@ -44,6 +44,43 @@ create.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\ProductImportController::create
+* @see app/Http/Controllers/Admin/ProductImportController.php:17
+* @route '/admin/products/import'
+*/
+const createForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ProductImportController::create
+* @see app/Http/Controllers/Admin/ProductImportController.php:17
+* @route '/admin/products/import'
+*/
+createForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ProductImportController::create
+* @see app/Http/Controllers/Admin/ProductImportController.php:17
+* @route '/admin/products/import'
+*/
+createForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: create.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+create.form = createForm
+
+/**
 * @see \App\Http\Controllers\Admin\ProductImportController::store
 * @see app/Http/Controllers/Admin/ProductImportController.php:24
 * @route '/admin/products/import'
@@ -76,6 +113,28 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: store.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ProductImportController::store
+* @see app/Http/Controllers/Admin/ProductImportController.php:24
+* @route '/admin/products/import'
+*/
+const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ProductImportController::store
+* @see app/Http/Controllers/Admin/ProductImportController.php:24
+* @route '/admin/products/import'
+*/
+storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+store.form = storeForm
 
 const ProductImportController = { create, store }
 

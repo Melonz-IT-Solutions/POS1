@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\ProductController::update
 * @see app/Http/Controllers/Admin/ProductController.php:208
@@ -32,6 +32,28 @@ update.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: update.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ProductController::update
+* @see app/Http/Controllers/Admin/ProductController.php:208
+* @route '/admin/products/bulk-price'
+*/
+const updateForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ProductController::update
+* @see app/Http/Controllers/Admin/ProductController.php:208
+* @route '/admin/products/bulk-price'
+*/
+updateForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: update.url(options),
+    method: 'post',
+})
+
+update.form = updateForm
 
 const bulkPrice = {
     update: Object.assign(update, update),

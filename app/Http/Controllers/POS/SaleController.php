@@ -28,7 +28,8 @@ class SaleController extends Controller
     public function __construct(
         private readonly SaleService $saleService,
         private readonly SaleRepositoryInterface $saleRepository,
-    ) {}
+    ) {
+    }
 
     public function index(Request $request): Response
     {
@@ -90,14 +91,14 @@ class SaleController extends Controller
         return Inertia::render('pos/Receipt', [
             'sale'     => $sale,
             'settings' => [
-                'business_name'     => Setting::get('business_name',     'My Store'),
-                'business_address'  => Setting::get('business_address',  ''),
-                'business_phone'    => Setting::get('business_phone',    ''),
-                'business_tin'      => Setting::get('business_tin',      ''),
-                'receipt_header'    => Setting::get('receipt_header',    'Thank you for shopping!'),
-                'receipt_footer'    => Setting::get('receipt_footer',    'Please come again.'),
-                'show_vat_breakdown'=> Setting::get('show_vat_breakdown', 'true') === 'true',
-                'vat_registered'    => Setting::get('vat_registered',    'true') === 'true',
+                'business_name'     => Setting::get('business_name', 'My Store'),
+                'business_address'  => Setting::get('business_address', ''),
+                'business_phone'    => Setting::get('business_phone', ''),
+                'business_tin'      => Setting::get('business_tin', ''),
+                'receipt_header'    => Setting::get('receipt_header', 'Thank you for shopping!'),
+                'receipt_footer'    => Setting::get('receipt_footer', 'Please come again.'),
+                'show_vat_breakdown' => Setting::get('show_vat_breakdown', 'true') === 'true',
+                'vat_registered'    => Setting::get('vat_registered', 'true') === 'true',
             ],
         ]);
     }

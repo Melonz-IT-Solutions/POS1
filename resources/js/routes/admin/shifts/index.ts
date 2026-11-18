@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\Admin\ShiftController::index
 * @see app/Http/Controllers/Admin/ShiftController.php:16
@@ -44,11 +44,48 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\Admin\ShiftController::index
+* @see app/Http/Controllers/Admin/ShiftController.php:16
+* @route '/admin/shifts'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ShiftController::index
+* @see app/Http/Controllers/Admin/ShiftController.php:16
+* @route '/admin/shifts'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ShiftController::index
+* @see app/Http/Controllers/Admin/ShiftController.php:16
+* @route '/admin/shifts'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
+
+/**
 * @see \App\Http\Controllers\Admin\ShiftController::report
 * @see app/Http/Controllers/Admin/ShiftController.php:79
 * @route '/admin/shifts/{shift}/report'
 */
-export const report = (args: { shift: number | { id: number } } | [shift: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const report = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: report.url(args, options),
     method: 'get',
 })
@@ -63,7 +100,7 @@ report.definition = {
 * @see app/Http/Controllers/Admin/ShiftController.php:79
 * @route '/admin/shifts/{shift}/report'
 */
-report.url = (args: { shift: number | { id: number } } | [shift: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+report.url = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { shift: args }
     }
@@ -96,7 +133,7 @@ report.url = (args: { shift: number | { id: number } } | [shift: number | { id: 
 * @see app/Http/Controllers/Admin/ShiftController.php:79
 * @route '/admin/shifts/{shift}/report'
 */
-report.get = (args: { shift: number | { id: number } } | [shift: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+report.get = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: report.url(args, options),
     method: 'get',
 })
@@ -106,17 +143,54 @@ report.get = (args: { shift: number | { id: number } } | [shift: number | { id: 
 * @see app/Http/Controllers/Admin/ShiftController.php:79
 * @route '/admin/shifts/{shift}/report'
 */
-report.head = (args: { shift: number | { id: number } } | [shift: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+report.head = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: report.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ShiftController::report
+* @see app/Http/Controllers/Admin/ShiftController.php:79
+* @route '/admin/shifts/{shift}/report'
+*/
+const reportForm = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: report.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ShiftController::report
+* @see app/Http/Controllers/Admin/ShiftController.php:79
+* @route '/admin/shifts/{shift}/report'
+*/
+reportForm.get = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: report.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ShiftController::report
+* @see app/Http/Controllers/Admin/ShiftController.php:79
+* @route '/admin/shifts/{shift}/report'
+*/
+reportForm.head = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: report.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+report.form = reportForm
 
 /**
 * @see \App\Http\Controllers\Admin\ShiftController::show
 * @see app/Http/Controllers/Admin/ShiftController.php:50
 * @route '/admin/shifts/{shift}'
 */
-export const show = (args: { shift: number | { id: number } } | [shift: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -131,7 +205,7 @@ show.definition = {
 * @see app/Http/Controllers/Admin/ShiftController.php:50
 * @route '/admin/shifts/{shift}'
 */
-show.url = (args: { shift: number | { id: number } } | [shift: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+show.url = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { shift: args }
     }
@@ -164,7 +238,7 @@ show.url = (args: { shift: number | { id: number } } | [shift: number | { id: nu
 * @see app/Http/Controllers/Admin/ShiftController.php:50
 * @route '/admin/shifts/{shift}'
 */
-show.get = (args: { shift: number | { id: number } } | [shift: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -174,10 +248,47 @@ show.get = (args: { shift: number | { id: number } } | [shift: number | { id: nu
 * @see app/Http/Controllers/Admin/ShiftController.php:50
 * @route '/admin/shifts/{shift}'
 */
-show.head = (args: { shift: number | { id: number } } | [shift: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\Admin\ShiftController::show
+* @see app/Http/Controllers/Admin/ShiftController.php:50
+* @route '/admin/shifts/{shift}'
+*/
+const showForm = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ShiftController::show
+* @see app/Http/Controllers/Admin/ShiftController.php:50
+* @route '/admin/shifts/{shift}'
+*/
+showForm.get = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\Admin\ShiftController::show
+* @see app/Http/Controllers/Admin/ShiftController.php:50
+* @route '/admin/shifts/{shift}'
+*/
+showForm.head = (args: { shift: string | number | { id: string | number } } | [shift: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+show.form = showForm
 
 const shifts = {
     index: Object.assign(index, index),

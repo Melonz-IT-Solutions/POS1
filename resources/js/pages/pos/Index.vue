@@ -104,6 +104,10 @@ function clearCustomer() {
     customerQuery.value = '';
 }
 
+function backToDashboard() {
+    window.location.href = '/dashboard';
+}
+
 // ── Time display ─────────────────────────────────────────────────────────
 const currentTime = ref(new Date().toLocaleTimeString('en-PH', { hour: '2-digit', minute: '2-digit' }));
 setInterval(() => {
@@ -161,9 +165,14 @@ const panelMode = ref<'search' | 'browse'>('search');
 
                 <button
                     :disabled="shiftLoading"
-                    class="bg-primary text-primary-foreground hover:bg-primary/90 w-full rounded-lg py-3 font-semibold disabled:opacity-50"
+                    class="bg-primary text-primary-foreground dark:text-white hover:bg-primary/90 w-full rounded-lg py-3 font-semibold disabled:opacity-50"
                     @click="openShift">
                     {{ shiftLoading ? 'Opening...' : 'Open Shift' }}
+                </button>
+                <button
+                    class="text-primary outline-2 mt-4 dark:text-white w-full rounded-lg py-3 font-semibold disabled:opacity-50"
+                    @click="backToDashboard">
+                    Cancel
                 </button>
             </div>
         </div>

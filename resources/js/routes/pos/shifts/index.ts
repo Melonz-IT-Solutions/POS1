@@ -1,4 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../wayfinder'
 /**
 * @see \App\Http\Controllers\POS\ShiftController::current
 * @see app/Http/Controllers/POS/ShiftController.php:15
@@ -42,6 +42,43 @@ current.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: current.url(options),
     method: 'head',
 })
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::current
+* @see app/Http/Controllers/POS/ShiftController.php:15
+* @route '/pos/shifts/current'
+*/
+const currentForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: current.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::current
+* @see app/Http/Controllers/POS/ShiftController.php:15
+* @route '/pos/shifts/current'
+*/
+currentForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: current.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::current
+* @see app/Http/Controllers/POS/ShiftController.php:15
+* @route '/pos/shifts/current'
+*/
+currentForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: current.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+current.form = currentForm
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::summary
@@ -88,6 +125,43 @@ summary.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\ShiftController::summary
+* @see app/Http/Controllers/POS/ShiftController.php:63
+* @route '/pos/shifts/summary'
+*/
+const summaryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: summary.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::summary
+* @see app/Http/Controllers/POS/ShiftController.php:63
+* @route '/pos/shifts/summary'
+*/
+summaryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: summary.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::summary
+* @see app/Http/Controllers/POS/ShiftController.php:63
+* @route '/pos/shifts/summary'
+*/
+summaryForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: summary.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+summary.form = summaryForm
+
+/**
 * @see \App\Http\Controllers\POS\ShiftController::open
 * @see app/Http/Controllers/POS/ShiftController.php:24
 * @route '/pos/shifts/open'
@@ -120,6 +194,28 @@ open.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: open.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::open
+* @see app/Http/Controllers/POS/ShiftController.php:24
+* @route '/pos/shifts/open'
+*/
+const openForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: open.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::open
+* @see app/Http/Controllers/POS/ShiftController.php:24
+* @route '/pos/shifts/open'
+*/
+openForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: open.url(options),
+    method: 'post',
+})
+
+open.form = openForm
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::close
@@ -156,6 +252,28 @@ close.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\ShiftController::close
+* @see app/Http/Controllers/POS/ShiftController.php:38
+* @route '/pos/shifts/close'
+*/
+const closeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: close.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::close
+* @see app/Http/Controllers/POS/ShiftController.php:38
+* @route '/pos/shifts/close'
+*/
+closeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: close.url(options),
+    method: 'post',
+})
+
+close.form = closeForm
+
+/**
 * @see \App\Http\Controllers\POS\ShiftController::cashIn
 * @see app/Http/Controllers/POS/ShiftController.php:91
 * @route '/pos/shifts/cash-in'
@@ -190,6 +308,28 @@ cashIn.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\ShiftController::cashIn
+* @see app/Http/Controllers/POS/ShiftController.php:91
+* @route '/pos/shifts/cash-in'
+*/
+const cashInForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: cashIn.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::cashIn
+* @see app/Http/Controllers/POS/ShiftController.php:91
+* @route '/pos/shifts/cash-in'
+*/
+cashInForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: cashIn.url(options),
+    method: 'post',
+})
+
+cashIn.form = cashInForm
+
+/**
 * @see \App\Http\Controllers\POS\ShiftController::cashOut
 * @see app/Http/Controllers/POS/ShiftController.php:108
 * @route '/pos/shifts/cash-out'
@@ -222,6 +362,28 @@ cashOut.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: cashOut.url(options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::cashOut
+* @see app/Http/Controllers/POS/ShiftController.php:108
+* @route '/pos/shifts/cash-out'
+*/
+const cashOutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: cashOut.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\ShiftController::cashOut
+* @see app/Http/Controllers/POS/ShiftController.php:108
+* @route '/pos/shifts/cash-out'
+*/
+cashOutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: cashOut.url(options),
+    method: 'post',
+})
+
+cashOut.form = cashOutForm
 
 const shifts = {
     current: Object.assign(current, current),

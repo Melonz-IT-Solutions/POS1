@@ -1,7 +1,7 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition, applyUrlDefaults } from './../../../../../wayfinder'
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition, applyUrlDefaults } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\POS\SaleController::index
-* @see app/Http/Controllers/POS/SaleController.php:33
+* @see app/Http/Controllers/POS/SaleController.php:34
 * @route '/pos/sales'
 */
 export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ index.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::index
-* @see app/Http/Controllers/POS/SaleController.php:33
+* @see app/Http/Controllers/POS/SaleController.php:34
 * @route '/pos/sales'
 */
 index.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ index.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::index
-* @see app/Http/Controllers/POS/SaleController.php:33
+* @see app/Http/Controllers/POS/SaleController.php:34
 * @route '/pos/sales'
 */
 index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::index
-* @see app/Http/Controllers/POS/SaleController.php:33
+* @see app/Http/Controllers/POS/SaleController.php:34
 * @route '/pos/sales'
 */
 index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -44,8 +44,45 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::index
+* @see app/Http/Controllers/POS/SaleController.php:34
+* @route '/pos/sales'
+*/
+const indexForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::index
+* @see app/Http/Controllers/POS/SaleController.php:34
+* @route '/pos/sales'
+*/
+indexForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::index
+* @see app/Http/Controllers/POS/SaleController.php:34
+* @route '/pos/sales'
+*/
+indexForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: index.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+index.form = indexForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::exportMethod
-* @see app/Http/Controllers/POS/SaleController.php:48
+* @see app/Http/Controllers/POS/SaleController.php:49
 * @route '/pos/sales/export'
 */
 export const exportMethod = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -60,7 +97,7 @@ exportMethod.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::exportMethod
-* @see app/Http/Controllers/POS/SaleController.php:48
+* @see app/Http/Controllers/POS/SaleController.php:49
 * @route '/pos/sales/export'
 */
 exportMethod.url = (options?: RouteQueryOptions) => {
@@ -69,7 +106,7 @@ exportMethod.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::exportMethod
-* @see app/Http/Controllers/POS/SaleController.php:48
+* @see app/Http/Controllers/POS/SaleController.php:49
 * @route '/pos/sales/export'
 */
 exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -79,7 +116,7 @@ exportMethod.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::exportMethod
-* @see app/Http/Controllers/POS/SaleController.php:48
+* @see app/Http/Controllers/POS/SaleController.php:49
 * @route '/pos/sales/export'
 */
 exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -88,8 +125,45 @@ exportMethod.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::exportMethod
+* @see app/Http/Controllers/POS/SaleController.php:49
+* @route '/pos/sales/export'
+*/
+const exportMethodForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::exportMethod
+* @see app/Http/Controllers/POS/SaleController.php:49
+* @route '/pos/sales/export'
+*/
+exportMethodForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::exportMethod
+* @see app/Http/Controllers/POS/SaleController.php:49
+* @route '/pos/sales/export'
+*/
+exportMethodForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: exportMethod.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+exportMethod.form = exportMethodForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::heldList
-* @see app/Http/Controllers/POS/SaleController.php:263
+* @see app/Http/Controllers/POS/SaleController.php:264
 * @route '/pos/sales/held'
 */
 export const heldList = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -104,7 +178,7 @@ heldList.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::heldList
-* @see app/Http/Controllers/POS/SaleController.php:263
+* @see app/Http/Controllers/POS/SaleController.php:264
 * @route '/pos/sales/held'
 */
 heldList.url = (options?: RouteQueryOptions) => {
@@ -113,7 +187,7 @@ heldList.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::heldList
-* @see app/Http/Controllers/POS/SaleController.php:263
+* @see app/Http/Controllers/POS/SaleController.php:264
 * @route '/pos/sales/held'
 */
 heldList.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -123,7 +197,7 @@ heldList.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::heldList
-* @see app/Http/Controllers/POS/SaleController.php:263
+* @see app/Http/Controllers/POS/SaleController.php:264
 * @route '/pos/sales/held'
 */
 heldList.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -132,11 +206,48 @@ heldList.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::heldList
+* @see app/Http/Controllers/POS/SaleController.php:264
+* @route '/pos/sales/held'
+*/
+const heldListForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: heldList.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::heldList
+* @see app/Http/Controllers/POS/SaleController.php:264
+* @route '/pos/sales/held'
+*/
+heldListForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: heldList.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::heldList
+* @see app/Http/Controllers/POS/SaleController.php:264
+* @route '/pos/sales/held'
+*/
+heldListForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: heldList.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+heldList.form = heldListForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::receipt
-* @see app/Http/Controllers/POS/SaleController.php:86
+* @see app/Http/Controllers/POS/SaleController.php:87
 * @route '/pos/sales/{sale}/receipt'
 */
-export const receipt = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const receipt = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: receipt.url(args, options),
     method: 'get',
 })
@@ -148,10 +259,10 @@ receipt.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::receipt
-* @see app/Http/Controllers/POS/SaleController.php:86
+* @see app/Http/Controllers/POS/SaleController.php:87
 * @route '/pos/sales/{sale}/receipt'
 */
-receipt.url = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+receipt.url = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { sale: args }
     }
@@ -181,30 +292,67 @@ receipt.url = (args: { sale: number | { id: number } } | [sale: number | { id: n
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::receipt
-* @see app/Http/Controllers/POS/SaleController.php:86
+* @see app/Http/Controllers/POS/SaleController.php:87
 * @route '/pos/sales/{sale}/receipt'
 */
-receipt.get = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+receipt.get = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: receipt.url(args, options),
     method: 'get',
 })
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::receipt
-* @see app/Http/Controllers/POS/SaleController.php:86
+* @see app/Http/Controllers/POS/SaleController.php:87
 * @route '/pos/sales/{sale}/receipt'
 */
-receipt.head = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+receipt.head = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: receipt.url(args, options),
     method: 'head',
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::receipt
+* @see app/Http/Controllers/POS/SaleController.php:87
+* @route '/pos/sales/{sale}/receipt'
+*/
+const receiptForm = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: receipt.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::receipt
+* @see app/Http/Controllers/POS/SaleController.php:87
+* @route '/pos/sales/{sale}/receipt'
+*/
+receiptForm.get = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: receipt.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::receipt
+* @see app/Http/Controllers/POS/SaleController.php:87
+* @route '/pos/sales/{sale}/receipt'
+*/
+receiptForm.head = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: receipt.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+receipt.form = receiptForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::show
-* @see app/Http/Controllers/POS/SaleController.php:105
+* @see app/Http/Controllers/POS/SaleController.php:106
 * @route '/pos/sales/{sale}'
 */
-export const show = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+export const show = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
@@ -216,10 +364,10 @@ show.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::show
-* @see app/Http/Controllers/POS/SaleController.php:105
+* @see app/Http/Controllers/POS/SaleController.php:106
 * @route '/pos/sales/{sale}'
 */
-show.url = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+show.url = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { sale: args }
     }
@@ -249,27 +397,64 @@ show.url = (args: { sale: number | { id: number } } | [sale: number | { id: numb
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::show
-* @see app/Http/Controllers/POS/SaleController.php:105
+* @see app/Http/Controllers/POS/SaleController.php:106
 * @route '/pos/sales/{sale}'
 */
-show.get = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+show.get = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: show.url(args, options),
     method: 'get',
 })
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::show
-* @see app/Http/Controllers/POS/SaleController.php:105
+* @see app/Http/Controllers/POS/SaleController.php:106
 * @route '/pos/sales/{sale}'
 */
-show.head = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+show.head = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: show.url(args, options),
     method: 'head',
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::show
+* @see app/Http/Controllers/POS/SaleController.php:106
+* @route '/pos/sales/{sale}'
+*/
+const showForm = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::show
+* @see app/Http/Controllers/POS/SaleController.php:106
+* @route '/pos/sales/{sale}'
+*/
+showForm.get = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::show
+* @see app/Http/Controllers/POS/SaleController.php:106
+* @route '/pos/sales/{sale}'
+*/
+showForm.head = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: show.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+show.form = showForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::store
-* @see app/Http/Controllers/POS/SaleController.php:116
+* @see app/Http/Controllers/POS/SaleController.php:117
 * @route '/pos/sales'
 */
 export const store = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -284,7 +469,7 @@ store.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::store
-* @see app/Http/Controllers/POS/SaleController.php:116
+* @see app/Http/Controllers/POS/SaleController.php:117
 * @route '/pos/sales'
 */
 store.url = (options?: RouteQueryOptions) => {
@@ -293,7 +478,7 @@ store.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::store
-* @see app/Http/Controllers/POS/SaleController.php:116
+* @see app/Http/Controllers/POS/SaleController.php:117
 * @route '/pos/sales'
 */
 store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -302,8 +487,30 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::store
+* @see app/Http/Controllers/POS/SaleController.php:117
+* @route '/pos/sales'
+*/
+const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::store
+* @see app/Http/Controllers/POS/SaleController.php:117
+* @route '/pos/sales'
+*/
+storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: store.url(options),
+    method: 'post',
+})
+
+store.form = storeForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::hold
-* @see app/Http/Controllers/POS/SaleController.php:161
+* @see app/Http/Controllers/POS/SaleController.php:162
 * @route '/pos/sales/hold'
 */
 export const hold = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -318,7 +525,7 @@ hold.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::hold
-* @see app/Http/Controllers/POS/SaleController.php:161
+* @see app/Http/Controllers/POS/SaleController.php:162
 * @route '/pos/sales/hold'
 */
 hold.url = (options?: RouteQueryOptions) => {
@@ -327,7 +534,7 @@ hold.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::hold
-* @see app/Http/Controllers/POS/SaleController.php:161
+* @see app/Http/Controllers/POS/SaleController.php:162
 * @route '/pos/sales/hold'
 */
 hold.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -336,11 +543,33 @@ hold.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::hold
+* @see app/Http/Controllers/POS/SaleController.php:162
+* @route '/pos/sales/hold'
+*/
+const holdForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: hold.url(options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::hold
+* @see app/Http/Controllers/POS/SaleController.php:162
+* @route '/pos/sales/hold'
+*/
+holdForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: hold.url(options),
+    method: 'post',
+})
+
+hold.form = holdForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::resume
-* @see app/Http/Controllers/POS/SaleController.php:190
+* @see app/Http/Controllers/POS/SaleController.php:191
 * @route '/pos/sales/{sale}/resume'
 */
-export const resume = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const resume = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: resume.url(args, options),
     method: 'post',
 })
@@ -352,10 +581,10 @@ resume.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::resume
-* @see app/Http/Controllers/POS/SaleController.php:190
+* @see app/Http/Controllers/POS/SaleController.php:191
 * @route '/pos/sales/{sale}/resume'
 */
-resume.url = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+resume.url = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { sale: args }
     }
@@ -385,20 +614,42 @@ resume.url = (args: { sale: number | { id: number } } | [sale: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::resume
-* @see app/Http/Controllers/POS/SaleController.php:190
+* @see app/Http/Controllers/POS/SaleController.php:191
 * @route '/pos/sales/{sale}/resume'
 */
-resume.post = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+resume.post = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: resume.url(args, options),
     method: 'post',
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::resume
+* @see app/Http/Controllers/POS/SaleController.php:191
+* @route '/pos/sales/{sale}/resume'
+*/
+const resumeForm = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: resume.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::resume
+* @see app/Http/Controllers/POS/SaleController.php:191
+* @route '/pos/sales/{sale}/resume'
+*/
+resumeForm.post = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: resume.url(args, options),
+    method: 'post',
+})
+
+resume.form = resumeForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::cancelHeld
-* @see app/Http/Controllers/POS/SaleController.php:205
+* @see app/Http/Controllers/POS/SaleController.php:206
 * @route '/pos/sales/{sale}/held'
 */
-export const cancelHeld = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+export const cancelHeld = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: cancelHeld.url(args, options),
     method: 'delete',
 })
@@ -410,10 +661,10 @@ cancelHeld.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::cancelHeld
-* @see app/Http/Controllers/POS/SaleController.php:205
+* @see app/Http/Controllers/POS/SaleController.php:206
 * @route '/pos/sales/{sale}/held'
 */
-cancelHeld.url = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+cancelHeld.url = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { sale: args }
     }
@@ -443,20 +694,52 @@ cancelHeld.url = (args: { sale: number | { id: number } } | [sale: number | { id
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::cancelHeld
-* @see app/Http/Controllers/POS/SaleController.php:205
+* @see app/Http/Controllers/POS/SaleController.php:206
 * @route '/pos/sales/{sale}/held'
 */
-cancelHeld.delete = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
+cancelHeld.delete = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'delete'> => ({
     url: cancelHeld.url(args, options),
     method: 'delete',
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::cancelHeld
+* @see app/Http/Controllers/POS/SaleController.php:206
+* @route '/pos/sales/{sale}/held'
+*/
+const cancelHeldForm = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: cancelHeld.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::cancelHeld
+* @see app/Http/Controllers/POS/SaleController.php:206
+* @route '/pos/sales/{sale}/held'
+*/
+cancelHeldForm.delete = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: cancelHeld.url(args, {
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'DELETE',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'post',
+})
+
+cancelHeld.form = cancelHeldForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::voidMethod
-* @see app/Http/Controllers/POS/SaleController.php:216
+* @see app/Http/Controllers/POS/SaleController.php:217
 * @route '/pos/sales/{sale}/void'
 */
-export const voidMethod = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const voidMethod = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: voidMethod.url(args, options),
     method: 'post',
 })
@@ -468,10 +751,10 @@ voidMethod.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::voidMethod
-* @see app/Http/Controllers/POS/SaleController.php:216
+* @see app/Http/Controllers/POS/SaleController.php:217
 * @route '/pos/sales/{sale}/void'
 */
-voidMethod.url = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+voidMethod.url = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { sale: args }
     }
@@ -501,20 +784,42 @@ voidMethod.url = (args: { sale: number | { id: number } } | [sale: number | { id
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::voidMethod
-* @see app/Http/Controllers/POS/SaleController.php:216
+* @see app/Http/Controllers/POS/SaleController.php:217
 * @route '/pos/sales/{sale}/void'
 */
-voidMethod.post = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+voidMethod.post = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: voidMethod.url(args, options),
     method: 'post',
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::voidMethod
+* @see app/Http/Controllers/POS/SaleController.php:217
+* @route '/pos/sales/{sale}/void'
+*/
+const voidMethodForm = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: voidMethod.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::voidMethod
+* @see app/Http/Controllers/POS/SaleController.php:217
+* @route '/pos/sales/{sale}/void'
+*/
+voidMethodForm.post = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: voidMethod.url(args, options),
+    method: 'post',
+})
+
+voidMethod.form = voidMethodForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::refund
-* @see app/Http/Controllers/POS/SaleController.php:232
+* @see app/Http/Controllers/POS/SaleController.php:233
 * @route '/pos/sales/{sale}/refund'
 */
-export const refund = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const refund = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: refund.url(args, options),
     method: 'post',
 })
@@ -526,10 +831,10 @@ refund.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::refund
-* @see app/Http/Controllers/POS/SaleController.php:232
+* @see app/Http/Controllers/POS/SaleController.php:233
 * @route '/pos/sales/{sale}/refund'
 */
-refund.url = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+refund.url = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { sale: args }
     }
@@ -559,20 +864,42 @@ refund.url = (args: { sale: number | { id: number } } | [sale: number | { id: nu
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::refund
-* @see app/Http/Controllers/POS/SaleController.php:232
+* @see app/Http/Controllers/POS/SaleController.php:233
 * @route '/pos/sales/{sale}/refund'
 */
-refund.post = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+refund.post = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: refund.url(args, options),
     method: 'post',
 })
 
 /**
+* @see \App\Http\Controllers\POS\SaleController::refund
+* @see app/Http/Controllers/POS/SaleController.php:233
+* @route '/pos/sales/{sale}/refund'
+*/
+const refundForm = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: refund.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::refund
+* @see app/Http/Controllers/POS/SaleController.php:233
+* @route '/pos/sales/{sale}/refund'
+*/
+refundForm.post = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: refund.url(args, options),
+    method: 'post',
+})
+
+refund.form = refundForm
+
+/**
 * @see \App\Http\Controllers\POS\SaleController::emailReceipt
-* @see app/Http/Controllers/POS/SaleController.php:249
+* @see app/Http/Controllers/POS/SaleController.php:250
 * @route '/pos/sales/{sale}/email-receipt'
 */
-export const emailReceipt = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const emailReceipt = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: emailReceipt.url(args, options),
     method: 'post',
 })
@@ -584,10 +911,10 @@ emailReceipt.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::emailReceipt
-* @see app/Http/Controllers/POS/SaleController.php:249
+* @see app/Http/Controllers/POS/SaleController.php:250
 * @route '/pos/sales/{sale}/email-receipt'
 */
-emailReceipt.url = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions) => {
+emailReceipt.url = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions) => {
     if (typeof args === 'string' || typeof args === 'number') {
         args = { sale: args }
     }
@@ -617,13 +944,35 @@ emailReceipt.url = (args: { sale: number | { id: number } } | [sale: number | { 
 
 /**
 * @see \App\Http\Controllers\POS\SaleController::emailReceipt
-* @see app/Http/Controllers/POS/SaleController.php:249
+* @see app/Http/Controllers/POS/SaleController.php:250
 * @route '/pos/sales/{sale}/email-receipt'
 */
-emailReceipt.post = (args: { sale: number | { id: number } } | [sale: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+emailReceipt.post = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: emailReceipt.url(args, options),
     method: 'post',
 })
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::emailReceipt
+* @see app/Http/Controllers/POS/SaleController.php:250
+* @route '/pos/sales/{sale}/email-receipt'
+*/
+const emailReceiptForm = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: emailReceipt.url(args, options),
+    method: 'post',
+})
+
+/**
+* @see \App\Http\Controllers\POS\SaleController::emailReceipt
+* @see app/Http/Controllers/POS/SaleController.php:250
+* @route '/pos/sales/{sale}/email-receipt'
+*/
+emailReceiptForm.post = (args: { sale: string | number | { id: string | number } } | [sale: string | number | { id: string | number } ] | string | number | { id: string | number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    action: emailReceipt.url(args, options),
+    method: 'post',
+})
+
+emailReceipt.form = emailReceiptForm
 
 const SaleController = { index, exportMethod, heldList, receipt, show, store, hold, resume, cancelHeld, voidMethod, refund, emailReceipt, export: exportMethod, void: voidMethod }
 
