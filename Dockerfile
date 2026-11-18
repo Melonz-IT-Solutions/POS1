@@ -47,14 +47,10 @@ COPY . .
 # Finish composer install (needed before npm build — wayfinder calls artisan)
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Build frontend assets (wayfinder plugin calls php artisan during build)
-COPY package.json package-lock.json ./
-RUN cp .env.example .env
-RUN php artisan key:generate
-RUN php artisan wayfinder:generate
+# Build frontend assets — wayfinder files already committed, skip the vite plugin
 RUN npm ci
 RUN SKIP_WAYFINDER=1 npm run build
-RUN rm -rf node_modules .env
+RUN rm -rf node_modules
 
 # Use clean vhost config: document root → public/, AllowOverride All for .htaccess
 RUN printf '<VirtualHost *:80>\n\
