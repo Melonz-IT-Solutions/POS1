@@ -27,9 +27,8 @@ export default defineConfig({
                 },
             },
         }),
-        wayfinder({
-            formVariants: true,
-        }),
+        // Skip during Docker build — artisan pre-generates the files instead
+        ...(process.env.SKIP_WAYFINDER ? [] : [wayfinder({ formVariants: true })]),
     ]),
     server: {
         watch: {
