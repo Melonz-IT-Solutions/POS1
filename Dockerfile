@@ -43,7 +43,16 @@ RUN composer install --no-interaction --no-scripts --no-autoloader --prefer-dist
 COPY . .
 
 # Use clean vhost config: document root → public/, AllowOverride All for .htaccess
-COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+RUN printf '<VirtualHost *:80>\n\
+    DocumentRoot /var/www/html/public\n\
+    <Directory /var/www/html/public>\n\
+        Options Indexes FollowSymLinks\n\
+        AllowOverride All\n\
+        Require all granted\n\
+    </Directory>\n\
+    ErrorLog ${APACHE_LOG_DIR}/error.log\n\
+    CustomLog ${APACHE_LOG_DIR}/access.log combined\n\
+</VirtualHost>\n' > /etc/apache2/sites-available/000-default.conf
 
 # Finish composer install
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
