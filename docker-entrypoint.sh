@@ -8,8 +8,8 @@ PORT=${PORT:-80}
 sed -i "s/Listen 80/Listen ${PORT}/" /etc/apache2/ports.conf
 sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/" /etc/apache2/sites-available/000-default.conf
 
-# Run migrations on every deploy (safe with --force in production)
-php artisan migrate --force
+# Run migrations and seed on every deploy (safe with --force in production)
+php artisan migrate --force --seed
 
 # Cache config/routes for performance
 php artisan config:cache
