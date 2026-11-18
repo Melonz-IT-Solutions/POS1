@@ -1,3 +1,19 @@
+# ── Stage 1: Build frontend assets ───────────────────────────────────────────
+FROM node:22-alpine AS frontend
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# Copy everything needed for the Vite build
+COPY vite.config.ts tsconfig.json ./
+COPY resources/ resources/
+COPY public/ public/
+
+RUN npm run build
+
+# ── Stage 2: PHP/Apache production image ─────────────────────────────────────
 FROM php:8.4-apache
 
 # Install system dependencies
@@ -41,6 +57,9 @@ RUN composer install --no-interaction --no-scripts --no-autoloader --prefer-dist
 
 # Copy application
 COPY . .
+
+# Copy compiled frontend assets from the node stage
+COPY --from=frontend /app/public/build ./public/build
 
 # Use clean vhost config: document root → public/, AllowOverride All for .htaccess
 RUN printf '<VirtualHost *:80>\n\
