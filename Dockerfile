@@ -42,15 +42,8 @@ RUN composer install --no-interaction --no-scripts --no-autoloader --prefer-dist
 # Copy application
 COPY . .
 
-# Point Apache document root to Laravel's public directory
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' \
-        /etc/apache2/sites-available/000-default.conf \
-    && sed -i 's|/var/www/html|/var/www/html/public|g' \
-        /etc/apache2/sites-available/000-default.conf
-
-# Allow .htaccess overrides for Laravel routing
-RUN printf '<Directory /var/www/html/public>\n\tAllowOverride All\n\tRequire all granted\n</Directory>\n' \
-    >> /etc/apache2/apache2.conf
+# Use clean vhost config: document root → public/, AllowOverride All for .htaccess
+COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Finish composer install
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
