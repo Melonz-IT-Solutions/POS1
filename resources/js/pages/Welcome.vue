@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import {
     AlertTriangle,
     CalendarCheck,
@@ -53,9 +53,10 @@ import {
     Zap,
     WashingMachine,
 } from '@lucide/vue';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import type { Component } from 'vue';
 import { dashboard, demo, login, register } from '@/routes';
+import { store as trialBookingStore } from '@/routes/trial-booking';
 
 type Peek = 'dashboard' | 'pos' | 'reports';
 
@@ -63,6 +64,50 @@ const active = ref<Peek>('dashboard');
 
 /* ── Demo store-picker ── */
 const showDemoModal = ref(false);
+
+/* ── Trial booking modal ── */
+const showTrialModal = ref(false);
+const page = usePage();
+
+const trialForm = useForm({
+    name: '',
+    store_type: '',
+    store_name: '',
+    address: '',
+    contact_no: '',
+    preferred_date: '',
+    message: '',
+});
+
+const trialBooked = ref(false);
+
+watch(showTrialModal, (open) => {
+    if (!open) {
+        trialForm.reset();
+        trialBooked.value = false;
+    }
+});
+
+function submitTrialBooking() {
+    trialForm.post(trialBookingStore.url(), {
+        preserveScroll: true,
+        onSuccess: () => {
+            trialBooked.value = true;
+        },
+    });
+}
+
+const trialStoreTypes: { label: string; value: string }[] = [
+    { label: 'Coffee Shop',      value: 'Coffee Shop' },
+    { label: 'Pharmacy',         value: 'Pharmacy' },
+    { label: 'Grocery',          value: 'Grocery' },
+    { label: 'Laundry',          value: 'Laundry' },
+    { label: 'Minimart',         value: 'Minimart' },
+    { label: 'Hardware',         value: 'Hardware' },
+    { label: 'Wholesaler',       value: 'Wholesaler' },
+    { label: 'Electronics Shop', value: 'Electronics Shop' },
+    { label: 'Other',            value: 'Other' },
+];
 
 function demoUrl(type: string): string {
     return demo.url({ query: { type } });
@@ -1046,13 +1091,14 @@ const plans: Plan[] = [
                         </div>
 
                         <div class="mt-8 flex flex-wrap items-center gap-4">
-                            <Link
-                                :href="$page.props.auth.user ? dashboard() : register()"
+                            <button
+                                type="button"
                                 class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold"
+                                @click="showTrialModal = true"
                             >
                                 Book your free trial
                                 <ArrowRight class="h-4 w-4" />
-                            </Link>
+                            </button>
                             <span class="text-xs text-slate-400">No credit card required. Terms apply.</span>
                         </div>
                     </div>
@@ -1182,9 +1228,168 @@ const plans: Plan[] = [
         <footer class="text-muted-foreground border-t py-8 text-center text-sm">
             © {{ new Date().getFullYear() }} POS1 — No.1 POS Software · Powered by <a href="https://www.melonz.io" target="_blank" class="hover:underline">Melonz IT Solutions</a>
         </footer>
-    </div>
 
-    <!-- ── Demo store-type picker modal ──────────────────────────────────── -->
+        <!-- ── Trial booking modal ───────────────────────────────────────────── -->
+    <Transition
+        enter-active-class="transition duration-200"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+    >
+        <div
+            v-if="showTrialModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+            @click.self="showTrialModal = false"
+        >
+            <div class="bg-background w-full max-w-lg overflow-hidden rounded-2xl border shadow-2xl">
+                <!-- Header -->
+                <div class="flex items-center justify-between border-b px-6 py-5">
+                    <div>
+                        <h2 class="text-lg font-bold">Book your free trial</h2>
+                        <p class="text-muted-foreground mt-0.5 text-sm">Fill in your details and we'll get in touch.</p>
+                    </div>
+                    <button
+                        type="button"
+                        class="text-muted-foreground hover:text-foreground rounded-lg p-1 transition"
+                        @click="showTrialModal = false"
+                    >
+                        <X class="h-5 w-5" />
+                    </button>
+                </div>
+
+                <!-- Success state -->
+                <div v-if="trialBooked" class="flex flex-col items-center gap-4 px-6 py-12 text-center">
+                    <span class="bg-primary/10 text-primary flex h-14 w-14 items-center justify-center rounded-full">
+                        <Check class="h-7 w-7" />
+                    </span>
+                    <div>
+                        <h3 class="text-lg font-bold">We've received your booking!</h3>
+                        <p class="text-muted-foreground mt-1 text-sm">Our team will reach out within 1-2 business days to arrange your free trial setup.</p>
+                    </div>
+                    <button
+                        type="button"
+                        class="bg-primary text-primary-foreground hover:bg-primary/90 mt-2 rounded-xl px-6 py-2.5 text-sm font-semibold"
+                        @click="showTrialModal = false"
+                    >
+                        Close
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <form v-else class="space-y-4 p-6" @submit.prevent="submitTrialBooking">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="mb-1.5 block text-sm font-medium">Your Name <span class="text-destructive">*</span></label>
+                            <input
+                                v-model="trialForm.name"
+                                type="text"
+                                placeholder="e.g. Juan Dela Cruz"
+                                class="border-input bg-background placeholder:text-muted-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
+                                :class="trialForm.errors.name ? 'border-destructive' : ''"
+                            />
+                            <p v-if="trialForm.errors.name" class="text-destructive mt-1 text-xs">{{ trialForm.errors.name }}</p>
+                        </div>
+
+                        <div>
+                            <label class="mb-1.5 block text-sm font-medium">Store Type <span class="text-destructive">*</span></label>
+                            <select
+                                v-model="trialForm.store_type"
+                                class="border-input bg-background text-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
+                                :class="trialForm.errors.store_type ? 'border-destructive' : ''"
+                            >
+                                <option value="" disabled>Store Type</option>
+                                <option v-for="t in trialStoreTypes" :key="t.value" :value="t.value">{{ t.label }}</option>
+                            </select>
+                            <p v-if="trialForm.errors.store_type" class="text-destructive mt-1 text-xs">{{ trialForm.errors.store_type }}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium">Store Name<span class="text-destructive">*</span></label>
+                        <input
+                            v-model="trialForm.store_name"
+                            type="text"
+                            placeholder="e.g. Juan's Minimart"
+                            class="border-input bg-background placeholder:text-muted-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
+                            :class="trialForm.errors.store_name ? 'border-destructive' : ''"
+                        />
+                        <p v-if="trialForm.errors.store_name" class="text-destructive mt-1 text-xs">{{ trialForm.errors.store_name }}</p>
+                    </div>
+
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium">Address <span class="text-destructive">*</span></label>
+                        <textarea
+                            v-model="trialForm.address"
+                            rows="2"
+                            placeholder="e.g. 123 Baliwasan, Zamboanga City"
+                            class="border-input bg-background placeholder:text-muted-foreground focus:ring-primary w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
+                            :class="trialForm.errors.address ? 'border-destructive' : ''"
+                        />
+                        <p v-if="trialForm.errors.address" class="text-destructive mt-1 text-xs">{{ trialForm.errors.address }}</p>
+                    </div>
+
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium">Contact Number <span class="text-destructive">*</span></label>
+                        <input
+                            v-model="trialForm.contact_no"
+                            type="tel"
+                            placeholder="e.g. 0917 123 4567"
+                            class="border-input bg-background placeholder:text-muted-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
+                            :class="trialForm.errors.contact_no ? 'border-destructive' : ''"
+                        />
+                        <p v-if="trialForm.errors.contact_no" class="text-destructive mt-1 text-xs">{{ trialForm.errors.contact_no }}</p>
+                    </div>
+
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium">When do you prefer to start?</label>
+                        <input
+                            v-model="trialForm.preferred_date"
+                            type="date"
+                            :min="new Date().toISOString().split('T')[0]"
+                            class="border-input bg-background text-foreground focus:ring-primary w-full rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
+                            :class="trialForm.errors.preferred_date ? 'border-destructive' : ''"
+                        />
+                        <p v-if="trialForm.errors.preferred_date" class="text-destructive mt-1 text-xs">{{ trialForm.errors.preferred_date }}</p>
+                    </div>
+
+                    <div>
+                        <label class="mb-1.5 block text-sm font-medium">Message</label>
+                        <textarea
+                            v-model="trialForm.message"
+                            rows="3"
+                            placeholder="Anything you'd like us to know before your trial..."
+                            class="border-input bg-background placeholder:text-muted-foreground focus:ring-primary w-full resize-none rounded-lg border px-3 py-2 text-sm outline-none focus:ring-2"
+                            :class="trialForm.errors.message ? 'border-destructive' : ''"
+                        />
+                        <p v-if="trialForm.errors.message" class="text-destructive mt-1 text-xs">{{ trialForm.errors.message }}</p>
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3 border-t pt-4">
+                        <button
+                            type="button"
+                            class="hover:bg-muted rounded-xl border px-5 py-2.5 text-sm font-semibold"
+                            @click="showTrialModal = false"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            :disabled="trialForm.processing"
+                            class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold disabled:opacity-60"
+                        >
+                            <span v-if="trialForm.processing">Sending…</span>
+                            <span v-else>Submit Booking</span>
+                            <ArrowRight v-if="!trialForm.processing" class="h-4 w-4" />
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </Transition>
+
+        <!-- ── Demo store-type picker modal ──────────────────────────────────── -->
     <Transition
         enter-active-class="transition duration-200"
         enter-from-class="opacity-0"
@@ -1234,7 +1439,8 @@ const plans: Plan[] = [
                 </div>
             </div>
         </div>
-    </Transition>
+        </Transition>
+    </div>
 </template>
 
 <style scoped>
