@@ -1,7 +1,7 @@
 import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../../../../wayfinder'
 /**
 * @see \App\Http\Controllers\POS\ShiftController::current
-* @see app/Http/Controllers/POS/ShiftController.php:15
+* @see app/Http/Controllers/POS/ShiftController.php:17
 * @route '/pos/shifts/current'
 */
 export const current = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -16,7 +16,7 @@ current.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::current
-* @see app/Http/Controllers/POS/ShiftController.php:15
+* @see app/Http/Controllers/POS/ShiftController.php:17
 * @route '/pos/shifts/current'
 */
 current.url = (options?: RouteQueryOptions) => {
@@ -25,7 +25,7 @@ current.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::current
-* @see app/Http/Controllers/POS/ShiftController.php:15
+* @see app/Http/Controllers/POS/ShiftController.php:17
 * @route '/pos/shifts/current'
 */
 current.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -35,7 +35,7 @@ current.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::current
-* @see app/Http/Controllers/POS/ShiftController.php:15
+* @see app/Http/Controllers/POS/ShiftController.php:17
 * @route '/pos/shifts/current'
 */
 current.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -45,7 +45,7 @@ current.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::current
-* @see app/Http/Controllers/POS/ShiftController.php:15
+* @see app/Http/Controllers/POS/ShiftController.php:17
 * @route '/pos/shifts/current'
 */
 const currentForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -55,7 +55,7 @@ const currentForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::current
-* @see app/Http/Controllers/POS/ShiftController.php:15
+* @see app/Http/Controllers/POS/ShiftController.php:17
 * @route '/pos/shifts/current'
 */
 currentForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -65,7 +65,7 @@ currentForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::current
-* @see app/Http/Controllers/POS/ShiftController.php:15
+* @see app/Http/Controllers/POS/ShiftController.php:17
 * @route '/pos/shifts/current'
 */
 currentForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -82,7 +82,7 @@ current.form = currentForm
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::summary
-* @see app/Http/Controllers/POS/ShiftController.php:63
+* @see app/Http/Controllers/POS/ShiftController.php:69
 * @route '/pos/shifts/summary'
 */
 export const summary = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -97,7 +97,7 @@ summary.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::summary
-* @see app/Http/Controllers/POS/ShiftController.php:63
+* @see app/Http/Controllers/POS/ShiftController.php:69
 * @route '/pos/shifts/summary'
 */
 summary.url = (options?: RouteQueryOptions) => {
@@ -106,7 +106,7 @@ summary.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::summary
-* @see app/Http/Controllers/POS/ShiftController.php:63
+* @see app/Http/Controllers/POS/ShiftController.php:69
 * @route '/pos/shifts/summary'
 */
 summary.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -116,7 +116,7 @@ summary.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::summary
-* @see app/Http/Controllers/POS/ShiftController.php:63
+* @see app/Http/Controllers/POS/ShiftController.php:69
 * @route '/pos/shifts/summary'
 */
 summary.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -126,7 +126,7 @@ summary.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::summary
-* @see app/Http/Controllers/POS/ShiftController.php:63
+* @see app/Http/Controllers/POS/ShiftController.php:69
 * @route '/pos/shifts/summary'
 */
 const summaryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -136,7 +136,7 @@ const summaryForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::summary
-* @see app/Http/Controllers/POS/ShiftController.php:63
+* @see app/Http/Controllers/POS/ShiftController.php:69
 * @route '/pos/shifts/summary'
 */
 summaryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -146,7 +146,7 @@ summaryForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::summary
-* @see app/Http/Controllers/POS/ShiftController.php:63
+* @see app/Http/Controllers/POS/ShiftController.php:69
 * @route '/pos/shifts/summary'
 */
 summaryForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -163,7 +163,7 @@ summary.form = summaryForm
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::open
-* @see app/Http/Controllers/POS/ShiftController.php:24
+* @see app/Http/Controllers/POS/ShiftController.php:26
 * @route '/pos/shifts/open'
 */
 export const open = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -178,7 +178,7 @@ open.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::open
-* @see app/Http/Controllers/POS/ShiftController.php:24
+* @see app/Http/Controllers/POS/ShiftController.php:26
 * @route '/pos/shifts/open'
 */
 open.url = (options?: RouteQueryOptions) => {
@@ -187,7 +187,7 @@ open.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::open
-* @see app/Http/Controllers/POS/ShiftController.php:24
+* @see app/Http/Controllers/POS/ShiftController.php:26
 * @route '/pos/shifts/open'
 */
 open.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -197,7 +197,7 @@ open.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::open
-* @see app/Http/Controllers/POS/ShiftController.php:24
+* @see app/Http/Controllers/POS/ShiftController.php:26
 * @route '/pos/shifts/open'
 */
 const openForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -207,7 +207,7 @@ const openForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => (
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::open
-* @see app/Http/Controllers/POS/ShiftController.php:24
+* @see app/Http/Controllers/POS/ShiftController.php:26
 * @route '/pos/shifts/open'
 */
 openForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -219,7 +219,7 @@ open.form = openForm
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::close
-* @see app/Http/Controllers/POS/ShiftController.php:38
+* @see app/Http/Controllers/POS/ShiftController.php:42
 * @route '/pos/shifts/close'
 */
 export const close = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -234,7 +234,7 @@ close.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::close
-* @see app/Http/Controllers/POS/ShiftController.php:38
+* @see app/Http/Controllers/POS/ShiftController.php:42
 * @route '/pos/shifts/close'
 */
 close.url = (options?: RouteQueryOptions) => {
@@ -243,7 +243,7 @@ close.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::close
-* @see app/Http/Controllers/POS/ShiftController.php:38
+* @see app/Http/Controllers/POS/ShiftController.php:42
 * @route '/pos/shifts/close'
 */
 close.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -253,7 +253,7 @@ close.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::close
-* @see app/Http/Controllers/POS/ShiftController.php:38
+* @see app/Http/Controllers/POS/ShiftController.php:42
 * @route '/pos/shifts/close'
 */
 const closeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -263,7 +263,7 @@ const closeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => 
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::close
-* @see app/Http/Controllers/POS/ShiftController.php:38
+* @see app/Http/Controllers/POS/ShiftController.php:42
 * @route '/pos/shifts/close'
 */
 closeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -275,7 +275,7 @@ close.form = closeForm
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashIn
-* @see app/Http/Controllers/POS/ShiftController.php:91
+* @see app/Http/Controllers/POS/ShiftController.php:97
 * @route '/pos/shifts/cash-in'
 */
 export const cashIn = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -290,7 +290,7 @@ cashIn.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashIn
-* @see app/Http/Controllers/POS/ShiftController.php:91
+* @see app/Http/Controllers/POS/ShiftController.php:97
 * @route '/pos/shifts/cash-in'
 */
 cashIn.url = (options?: RouteQueryOptions) => {
@@ -299,7 +299,7 @@ cashIn.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashIn
-* @see app/Http/Controllers/POS/ShiftController.php:91
+* @see app/Http/Controllers/POS/ShiftController.php:97
 * @route '/pos/shifts/cash-in'
 */
 cashIn.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -309,7 +309,7 @@ cashIn.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashIn
-* @see app/Http/Controllers/POS/ShiftController.php:91
+* @see app/Http/Controllers/POS/ShiftController.php:97
 * @route '/pos/shifts/cash-in'
 */
 const cashInForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -319,7 +319,7 @@ const cashInForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =>
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashIn
-* @see app/Http/Controllers/POS/ShiftController.php:91
+* @see app/Http/Controllers/POS/ShiftController.php:97
 * @route '/pos/shifts/cash-in'
 */
 cashInForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -331,7 +331,7 @@ cashIn.form = cashInForm
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashOut
-* @see app/Http/Controllers/POS/ShiftController.php:108
+* @see app/Http/Controllers/POS/ShiftController.php:114
 * @route '/pos/shifts/cash-out'
 */
 export const cashOut = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -346,7 +346,7 @@ cashOut.definition = {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashOut
-* @see app/Http/Controllers/POS/ShiftController.php:108
+* @see app/Http/Controllers/POS/ShiftController.php:114
 * @route '/pos/shifts/cash-out'
 */
 cashOut.url = (options?: RouteQueryOptions) => {
@@ -355,7 +355,7 @@ cashOut.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashOut
-* @see app/Http/Controllers/POS/ShiftController.php:108
+* @see app/Http/Controllers/POS/ShiftController.php:114
 * @route '/pos/shifts/cash-out'
 */
 cashOut.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
@@ -365,7 +365,7 @@ cashOut.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashOut
-* @see app/Http/Controllers/POS/ShiftController.php:108
+* @see app/Http/Controllers/POS/ShiftController.php:114
 * @route '/pos/shifts/cash-out'
 */
 const cashOutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
@@ -375,7 +375,7 @@ const cashOutForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> =
 
 /**
 * @see \App\Http\Controllers\POS\ShiftController::cashOut
-* @see app/Http/Controllers/POS/ShiftController.php:108
+* @see app/Http/Controllers/POS/ShiftController.php:114
 * @route '/pos/shifts/cash-out'
 */
 cashOutForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({

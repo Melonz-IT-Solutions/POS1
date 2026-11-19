@@ -8,6 +8,7 @@ use App\DataTransferObjects\PaymentData;
 use App\Enums\VatType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\POS\StoreSaleRequest;
+use App\Jobs\NotifyTelegramSale;
 use App\Http\Requests\POS\VoidSaleRequest;
 use App\Http\Requests\POS\RefundSaleRequest;
 use App\Mail\SaleReceipt;
@@ -152,6 +153,8 @@ class SaleController extends Controller
         );
 
         $sale = $this->saleService->createFromCart($data, $request->user());
+
+        NotifyTelegramSale::dispatch($sale);
 
         return response()->json([
             'message' => 'Sale completed successfully.',

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\POS;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\NotifyTelegramShiftClosed;
+use App\Jobs\NotifyTelegramShiftOpened;
 use App\Services\ShiftService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -29,6 +31,8 @@ class ShiftController extends Controller
 
         $shift = $this->shiftService->open($request->user(), $validated['opening_float']);
 
+        NotifyTelegramShiftOpened::dispatch($shift);
+
         return response()->json([
             'message' => 'Shift opened.',
             'shift'   => $shift,
@@ -53,6 +57,8 @@ class ShiftController extends Controller
             closingCash:  $validated['closing_cash'],
             notes:        $validated['notes'] ?? null,
         );
+
+        NotifyTelegramShiftClosed::dispatch($shift);
 
         return response()->json([
             'message' => 'Shift closed.',

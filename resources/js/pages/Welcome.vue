@@ -55,11 +55,18 @@ import {
 } from '@lucide/vue';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import type { Component } from 'vue';
-import { dashboard, login, register } from '@/routes';
+import { dashboard, demo, login, register } from '@/routes';
 
 type Peek = 'dashboard' | 'pos' | 'reports';
 
 const active = ref<Peek>('dashboard');
+
+/* ── Demo store-picker ── */
+const showDemoModal = ref(false);
+
+function demoUrl(type: string): string {
+    return demo.url({ query: { type } });
+}
 
 const peeks: { key: Peek; label: string; caption: string; icon: Component }[] = [
     { key: 'dashboard', label: 'Dashboard', caption: 'See today’s revenue, transactions and best-sellers at a glance.', icon: LayoutGrid },
@@ -89,15 +96,15 @@ onMounted(() => {
 onBeforeUnmount(() => observer?.disconnect());
 
 /* ── Hero: store-type marquee ── */
-const storeTypes: { name: string; icon: Component }[] = [
-    { name: 'Coffee Shop', icon: Coffee },
-    { name: 'Pharmacy', icon: Pill },
-    { name: 'Grocery', icon: ShoppingBasket },
-    { name: 'Laundry', icon: WashingMachine },
-    { name: 'Minimart', icon: Store },
-    { name: 'Hardware', icon: Hammer },
-    { name: 'Wholesaler', icon: Warehouse },
-    { name: 'Electronics Shop', icon: Smartphone },
+const storeTypes: { name: string; type: string; icon: Component }[] = [
+    { name: 'Coffee Shop', type: 'coffeeshop', icon: Coffee },
+    { name: 'Pharmacy', type: 'pharmacy', icon: Pill },
+    { name: 'Grocery', type: 'grocery', icon: ShoppingBasket },
+    { name: 'Laundry', type: 'laundry', icon: WashingMachine },
+    { name: 'Minimart', type: 'minimart', icon: Store },
+    { name: 'Hardware', type: 'hardware', icon: Hammer },
+    { name: 'Wholesaler', type: 'wholesaler', icon: Warehouse },
+    { name: 'Electronics Shop', type: 'electronics', icon: Smartphone },
 ];
 
 /* ── Sidebar (mirrors AppSidebar.vue) ── */
@@ -430,12 +437,22 @@ const plans: Plan[] = [
                 </p>
                 <div class="mt-8 flex flex-wrap justify-center gap-3">
                     <Link
-                        :href="$page.props.auth.user ? dashboard() : login()"
+                        v-if="$page.props.auth.user"
+                        :href="dashboard()"
                         class="bg-primary text-primary-foreground shadow-primary/25 hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold shadow-lg"
                     >
-                        {{ $page.props.auth.user ? 'Open Dashboard' : 'Start Selling' }}
+                        Open Dashboard
                         <ArrowRight class="h-4 w-4" />
                     </Link>
+                    <button
+                        v-else
+                        type="button"
+                        class="bg-primary text-primary-foreground shadow-primary/25 hover:bg-primary/90 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-semibold shadow-lg"
+                        @click="showDemoModal = true"
+                    >
+                        Get Free Demo
+                        <Zap class="h-4 w-4" />
+                    </button>
                     <a href="#preview" class="hover:bg-muted rounded-xl border px-6 py-3 font-semibold">Take a sneak peek</a>
                 </div>
             </div>
@@ -452,16 +469,18 @@ const plans: Plan[] = [
                         class="marquee-track flex shrink-0 gap-4 pr-4"
                         :aria-hidden="copy === 2"
                     >
-                        <div
+                        <a
                             v-for="t in storeTypes"
                             :key="t.name"
+                            :href="demoUrl(t.type)"
+                            :tabindex="copy === 2 ? -1 : undefined"
                             class="hover:border-primary hover:text-primary flex shrink-0 items-center gap-3 rounded-xl border bg-card px-5 py-3 shadow-sm transition-colors"
                         >
                             <span class="bg-primary/10 text-primary flex h-9 w-9 items-center justify-center rounded-lg">
                                 <component :is="t.icon" class="h-5 w-5" />
                             </span>
                             <span class="font-semibold whitespace-nowrap">{{ t.name }}</span>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1164,6 +1183,58 @@ const plans: Plan[] = [
             © {{ new Date().getFullYear() }} POS1 — No.1 POS Software · Powered by <a href="https://www.melonz.io" target="_blank" class="hover:underline">Melonz IT Solutions</a>
         </footer>
     </div>
+
+    <!-- ── Demo store-type picker modal ──────────────────────────────────── -->
+    <Transition
+        enter-active-class="transition duration-200"
+        enter-from-class="opacity-0"
+        enter-to-class="opacity-100"
+        leave-active-class="transition duration-150"
+        leave-from-class="opacity-100"
+        leave-to-class="opacity-0"
+    >
+        <div
+            v-if="showDemoModal"
+            class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+            @click.self="showDemoModal = false"
+        >
+            <div class="bg-background w-full max-w-2xl overflow-hidden rounded-2xl border shadow-2xl">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between border-b px-6 py-5">
+                    <div>
+                        <h2 class="text-lg font-bold">Choose your store type</h2>
+                        <p class="text-muted-foreground mt-0.5 text-sm">We'll load a live demo tailored to your business.</p>
+                    </div>
+                    <button
+                        class="text-muted-foreground hover:text-foreground rounded-lg p-1 transition"
+                        @click="showDemoModal = false"
+                    >
+                        <X class="h-5 w-5" />
+                    </button>
+                </div>
+
+                <!-- Store type grid -->
+                <div class="grid grid-cols-2 gap-3 p-6 sm:grid-cols-4">
+                    <a
+                        v-for="t in storeTypes"
+                        :key="t.name"
+                        :href="demoUrl(t.type)"
+                        class="hover:border-primary hover:text-primary group flex flex-col items-center gap-3 rounded-xl border bg-card p-4 text-center transition hover:shadow-md active:scale-95"
+                    >
+                        <span class="bg-primary/10 text-primary flex h-11 w-11 items-center justify-center rounded-xl transition group-hover:bg-primary group-hover:text-white">
+                            <component :is="t.icon" class="h-6 w-6" />
+                        </span>
+                        <span class="text-sm font-semibold">{{ t.name }}</span>
+                    </a>
+                </div>
+
+                <!-- Footer note -->
+                <div class="bg-muted/40 border-t px-6 py-3 text-center text-xs text-muted-foreground">
+                    No sign-up required. The demo is fully interactive with simulated data.
+                </div>
+            </div>
+        </div>
+    </Transition>
 </template>
 
 <style scoped>

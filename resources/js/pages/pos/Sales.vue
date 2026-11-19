@@ -98,7 +98,7 @@ const exportUrl = computed(() => {
     if (dateTo.value)                        params.set('date_to', dateTo.value);
     if (paymentMethod.value !== 'all')       params.set('payment_method', paymentMethod.value);
     const qs = params.toString();
-    return SaleController.export?.url() + (qs ? '?' + qs : '');
+    return SaleController.exportMethod?.url() + (qs ? '?' + qs : '');
 });
 
 function resetFilters() {
