@@ -11,6 +11,9 @@ fi
 # Run migrations + seed on every deploy
 php artisan migrate --force --seed
 
+# Create the public storage symlink
+php artisan storage:link --force
+
 # Cache config/routes/views for performance
 php artisan config:cache
 php artisan route:cache
