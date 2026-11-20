@@ -9,7 +9,7 @@ if [ "$1" = "apache2-foreground" ]; then
 fi
 
 # Run migrations + seed on every deploy
-php artisan migrate:fresh --force --seed
+php artisan migrate --force --seed
 
 # Create the public storage symlink
 php artisan storage:link --force
