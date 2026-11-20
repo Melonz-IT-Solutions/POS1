@@ -395,10 +395,10 @@ const plans: Plan[] = [
         ],
     },
     {
-        name: 'Enterprise',
+        name: 'Pro MAX',
         price: '1449',
         tagline: 'For established, high-volume stores that need it all, without limits.',
-        cta: 'Go Enterprise',
+        cta: 'Go Pro MAX',
         limits: ['Unlimited products', 'Unlimited users'],
         domain: 'mystore.pos1.ph',
         intro: 'Everything in Pro, plus:',
